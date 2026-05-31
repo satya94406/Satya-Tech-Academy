@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Great+Vibes&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(245, 158, 11, 0.14), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.12), transparent 30%),
+    #070812;
+  color: #e2e8f0;
+  font-family: Outfit, Inter, system-ui, sans-serif;
+}
+
+input,
+select,
+textarea {
+  color-scheme: dark;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(90deg, #fef3c7, #f5c842, #c8960c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.page-shell {
+  @apply min-h-screen text-slate-100;
+}
+
+.container-pro {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+.card-pro {
+  @apply rounded-3xl border border-white/10 bg-white/[0.04] shadow-2xl backdrop-blur-xl;
+}
+
+.input-pro {
+  @apply w-full rounded-xl border border-white/10 bg-academy-800 px-4 py-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-gold-500/70 focus:ring-2 focus:ring-gold-500/15;
+}
+
+.label-pro {
+  @apply mb-2 block text-[11px] font-bold uppercase tracking-[2px] text-slate-400;
+}
+
+.btn-primary {
+  @apply rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 px-5 py-3 text-sm font-extrabold text-[#1a0a00] shadow-glow transition hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(245,158,11,0.28)] disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-bold text-slate-100 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.table-pro {
+  @apply w-full border-collapse text-left text-sm;
+}
+
+.table-pro th {
+  @apply border-b border-white/10 px-4 py-3 text-xs uppercase tracking-widest text-slate-500;
+}
+
+.table-pro td {
+  @apply border-b border-white/5 px-4 py-4 text-slate-300;
+}
