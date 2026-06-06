@@ -41,7 +41,8 @@ public class SecurityConfig {
     configuration.setAllowedOrigins(List.of(
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "http://13.63.174.104"
+        "https://satya-tech-academy.vercel.app",
+        "http://16.170.164.119"
     ));
     
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

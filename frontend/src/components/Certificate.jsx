@@ -4,9 +4,9 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
   const {
     studentName = 'Student Full Name',
     courseName = 'Course Name',
-    serialNo = 'SDA-2026-000001',
+    serialNo = 'STA-2026-000001',
     issueDate = '9 May 2026',
-    instructorName = 'Satya Dev',
+    instructorName = 'Satya Prakash',
     duration = '',
   } = data
 
