@@ -18,7 +18,7 @@ public class CourseEnrollment {
   private String transactionId;
 
   @Lob
-  @Column(columnDefinition = "LONGTEXT")
+  @Column(columnDefinition = "TEXT")
   private String paymentScreenshotUrl;
 
   @Enumerated(EnumType.STRING)
