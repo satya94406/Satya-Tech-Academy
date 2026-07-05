@@ -12,6 +12,7 @@ import StudentDashboard from './pages/StudentDashboard'
 import AdminDashboard from './pages/AdminDashboard'
 import CertificatePage from './pages/CertificatePage'
 import VerifyPage from './pages/VerifyPage'
+import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler'
 
 function ProtectedRoute({ role, children }) {
   const token = localStorage.getItem('token')
@@ -38,6 +39,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/verify" element={<VerifyPage />} />
         <Route path="/certificate/:serialNo" element={<CertificatePage />} />
+        <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
         <Route
           path="/student"

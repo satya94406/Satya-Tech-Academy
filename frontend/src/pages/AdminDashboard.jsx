@@ -119,16 +119,15 @@ export default function AdminDashboard() {
               <p className="mt-1 text-xs text-slate-400">Manage students, payments and certificates</p>
             </div>
 
-            <nav className="mt-4 space-y-2">
+            <nav className="mt-4 flex overflow-x-auto gap-2 pb-2 lg:flex-col lg:overflow-visible lg:pb-0 hide-scrollbar">
               {sidebarItems.map((item) => (
                 <button
                   key={item.key}
                   onClick={() => setActiveTab(item.key)}
-                  className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-bold transition ${
-                    activeTab === item.key
-                      ? 'bg-gold-500 text-[#1a0a00]'
-                      : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.07]'
-                  }`}
+                  className={`flex items-center gap-3 whitespace-nowrap rounded-2xl px-4 py-3 text-left text-sm font-bold transition lg:w-full ${activeTab === item.key
+                    ? 'bg-gold-500 text-[#1a0a00]'
+                    : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.07]'
+                    }`}
                 >
                   <span>{item.icon}</span>
                   {item.label}
@@ -190,11 +189,11 @@ function Overview({ pendingPayments, approvedPayments, pendingCertificates, enro
           Verify manual payments, approve enrollments, manage certificate requests, and track student records from one clean dashboard.
         </p>
 
-        <div className="mt-7 flex flex-wrap gap-3">
-          <button onClick={() => onNavigate('payments')} className="btn-primary">
+        <div className="mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
+          <button onClick={() => onNavigate('payments')} className="btn-primary w-full sm:w-auto">
             Check Payments
           </button>
-          <button onClick={() => onNavigate('certificates')} className="btn-secondary">
+          <button onClick={() => onNavigate('certificates')} className="btn-secondary w-full sm:w-auto text-center">
             Certificate Requests
           </button>
         </div>

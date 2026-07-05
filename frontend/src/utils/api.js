@@ -22,6 +22,23 @@ export function saveAuth(authResponse) {
   )
 }
 
+export function saveOAuthToken(token) {
+  try {
+    const payloadBase64 = token.split('.')[1]
+    const decodedJson = atob(payloadBase64)
+    const payload = JSON.parse(decodedJson)
+
+    saveAuth({
+      token: token,
+      name: payload.name || 'User',
+      email: payload.sub,
+      role: payload.role || 'STUDENT',
+    })
+  } catch (error) {
+    console.error('Error decoding OAuth token:', error)
+  }
+}
+
 export function logout() {
   localStorage.removeItem('token')
   localStorage.removeItem('user')

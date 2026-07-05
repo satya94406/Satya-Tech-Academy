@@ -3,10 +3,10 @@ import Chatbot from '../components/Chatbot'
 import Navbar from '../components/Navbar'
 
 const stats = [
-  { value: '25+', label: 'Practical Modules', icon: '📚' },
-  { value: '12+', label: 'Live Projects', icon: '💻' },
-  { value: '1:1', label: 'Mentor Support', icon: '🎯' },
-  { value: '100%', label: 'Career Focused', icon: '🚀' },
+  { value: '5000+', label: 'Students', icon: '🎓' },
+  { value: '120+', label: 'Projects', icon: '💻' },
+  { value: '95%', label: 'Placement Assistance', icon: '🚀' },
+  { value: '4.9★', label: 'Rating', icon: '⭐' },
 ]
 
 const courses = [
@@ -99,13 +99,66 @@ const features = [
 export default function HomePage() {
   const navigate = useNavigate()
 
+  const handleEnroll = () => {
+    const token = localStorage.getItem('token')
+    const user = JSON.parse(localStorage.getItem('user') || '{}')
+
+    if (!token) {
+      navigate('/register')
+      return
+    }
+
+    if (user.role === 'STUDENT') {
+      navigate('/student')
+    } else if (user.role === 'ADMIN') {
+      navigate('/admin')
+    } else {
+      navigate('/')
+    }
+  }
+
   return (
     <div className="page-shell">
       <Navbar />
 
+      {/* Sleek Infinite Ad Banner */}
+      <div className="w-full overflow-hidden bg-gold-500 py-2.5">
+        <div className="animate-marquee flex items-center gap-12 whitespace-nowrap text-[13px] font-bold uppercase tracking-[2px] text-[#1a0a00]">
+          {/* First set of ads */}
+          <span className="flex items-center gap-2">
+            <span className="text-base">🚀</span> <span>Special Offer: 50% Off on Full Stack Course!</span>
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-base">⚡</span> <span>New Batch: Python AI Projects starting soon!</span>
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-base">💼</span> <span>Crack Top MNCs: Placement Focused DSA Track!</span>
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-base">🎓</span> <span>Satya Tech Academy: Building Future Engineers!</span>
+          </span>
+          
+          {/* Duplicate set for seamless infinite scroll */}
+          <span className="flex items-center gap-2">
+            <span className="text-base">🚀</span> <span>Special Offer: 50% Off on Full Stack Course!</span>
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-base">⚡</span> <span>New Batch: Python AI Projects starting soon!</span>
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-base">💼</span> <span>Crack Top MNCs: Placement Focused DSA Track!</span>
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-base">🎓</span> <span>Satya Tech Academy: Building Future Engineers!</span>
+          </span>
+        </div>
+      </div>
+
       <section className="relative overflow-hidden py-20 sm:py-28 lg:py-32">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.18),transparent_60%)]" />
-        <div className="absolute left-1/2 top-24 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-gold-500/10 blur-3xl" />
+        <div className="absolute left-1/2 top-24 -z-10 h-96 w-96 -translate-x-1/2 rounded-full bg-gold-500/10 blur-[100px]" />
+        <div className="absolute right-0 top-1/2 -z-10 h-72 w-72 -translate-y-1/2 rounded-full bg-indigo-500/10 blur-[100px]" />
+        <div className="absolute left-0 bottom-0 -z-10 h-64 w-64 rounded-full bg-amber-600/10 blur-[80px]" />
 
         <div className="container-pro grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
@@ -114,24 +167,23 @@ export default function HomePage() {
               Satya Tech Academy
             </div>
 
-            <h1 className="font-cinzel text-4xl font-extrabold leading-tight text-[#fefce8] sm:text-5xl lg:text-7xl">
+            <h1 className="font-outfit text-5xl font-extrabold leading-[1.15] text-white sm:text-6xl lg:text-7xl">
               Learn Coding From Basic To
-              <span className="text-gradient-gold block">Job Ready Level.</span>
+              <span className="text-gradient-gold block mt-2">Job Ready Level.</span>
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-400 sm:text-lg">
-              Satya Tech Academy helps students learn Java, Spring Boot, React,
-              Python, DSA, AI projects, Docker, and deployment with practical
-              guidance and real project-based learning.
+              Master Java, Spring Boot, React, Python, DSA and AI <br className="hidden sm:block" />
+              through real-world projects and mentor-guided learning.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <button onClick={() => navigate('/register')} className="btn-primary">
-                Enroll as Student
+            <div className="mt-8 flex flex-col sm:flex-row flex-wrap gap-4">
+              <button onClick={() => navigate('/register')} className="rounded-full bg-gradient-to-r from-gold-500 to-gold-600 px-8 py-3.5 text-base font-extrabold text-[#1a0a00] shadow-[0_0_20px_rgba(245,158,11,0.3)] transition hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] w-full sm:w-auto">
+                Start Learning
               </button>
 
-              <a href="#courses" className="btn-secondary">
-                Explore Courses
+              <a href="#courses" className="rounded-full border border-white/10 bg-white/5 px-8 py-3.5 text-base font-bold text-slate-100 transition hover:bg-white/10 w-full sm:w-auto text-center">
+                Browse Courses
               </a>
             </div>
 
@@ -148,9 +200,9 @@ export default function HomePage() {
                 Student Learning Path
               </p>
 
-              <div className="mt-6 space-y-4">
+              <div className="mt-6 space-y-6">
                 {learningSteps.map((step, index) => (
-                  <div key={step.title} className="rounded-2xl bg-black/20 p-4">
+                  <div key={step.title} className="rounded-2xl bg-black/30 p-4 transition hover:bg-black/40">
                     <div className="flex items-center gap-3">
                       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gold-500 text-sm font-extrabold text-black">
                         {index + 1}
@@ -228,9 +280,12 @@ export default function HomePage() {
                 ))}
               </div>
 
-              <Link to="/register" className="mt-5 inline-block text-sm font-bold text-gold-400">
+              <button
+                onClick={handleEnroll}
+                className="mt-5 inline-block text-sm font-bold text-gold-400"
+              >
                 Enroll now →
-              </Link>
+              </button>
             </div>
           ))}
         </div>
@@ -278,7 +333,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <button onClick={() => navigate('/register')} className="btn-primary whitespace-nowrap">
+          <button onClick={() => navigate('/register')} className="btn-primary w-full sm:w-auto whitespace-nowrap">
             Join Academy
           </button>
         </div>

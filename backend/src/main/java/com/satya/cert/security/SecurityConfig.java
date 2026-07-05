@@ -18,9 +18,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
   private final JwtFilter jwtFilter;
+  private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
-  public SecurityConfig(JwtFilter jwtFilter) {
+  public SecurityConfig(JwtFilter jwtFilter, OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler) {
     this.jwtFilter = jwtFilter;
+    this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
   }
 
   @Bean
@@ -63,10 +65,13 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/api/auth/**", "/api/public/**").permitAll()
+                auth.requestMatchers("/api/auth/**", "/api/public/**", "/oauth2/**", "/login/oauth2/**").permitAll()
                     .requestMatchers("/api/admin/**").hasRole("ADMIN")
                     .requestMatchers("/api/student/**").hasAnyRole("STUDENT", "ADMIN")
                     .anyRequest().authenticated())
+        .oauth2Login(oauth2 -> oauth2
+            .successHandler(oAuth2LoginSuccessHandler)
+        )
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();

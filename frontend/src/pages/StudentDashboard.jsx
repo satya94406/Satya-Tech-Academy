@@ -24,7 +24,7 @@ const sidebarItems = [
 ]
 
 export default function StudentDashboard() {
-  const user = getUser()
+  const user = getUser() || {}
   const [activeTab, setActiveTab] = useState('overview')
   const [loading, setLoading] = useState(false)
   const [certificateRequests, setCertificateRequests] = useState([])
@@ -189,16 +189,15 @@ export default function StudentDashboard() {
               <p className="mt-1 text-xs text-slate-400">{user.email}</p>
             </div>
 
-            <nav className="mt-4 space-y-2">
+            <nav className="mt-4 flex overflow-x-auto gap-2 pb-2 lg:flex-col lg:overflow-visible lg:pb-0 hide-scrollbar">
               {sidebarItems.map((item) => (
                 <button
                   key={item.key}
                   onClick={() => setActiveTab(item.key)}
-                  className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-bold transition ${
-                    activeTab === item.key
-                      ? 'bg-gold-500 text-[#1a0a00]'
-                      : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.07]'
-                  }`}
+                  className={`flex items-center gap-3 whitespace-nowrap rounded-2xl px-4 py-3 text-left text-sm font-bold transition lg:w-full ${activeTab === item.key
+                    ? 'bg-gold-500 text-[#1a0a00]'
+                    : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.07]'
+                    }`}
                 >
                   <span>{item.icon}</span>
                   {item.label}
@@ -264,11 +263,11 @@ function Overview({ user, enrollments, pendingPayments, approvedCertificates, on
           Enroll in a course, submit payment proof, track payment verification, and request certificates after course completion.
         </p>
 
-        <div className="mt-7 flex flex-wrap gap-3">
-          <button onClick={() => onNavigate('enroll')} className="btn-primary">
+        <div className="mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
+          <button onClick={() => onNavigate('enroll')} className="btn-primary w-full sm:w-auto">
             Enroll in Course
           </button>
-          <button onClick={() => onNavigate('certificates')} className="btn-secondary">
+          <button onClick={() => onNavigate('certificates')} className="btn-secondary w-full sm:w-auto text-center">
             View Certificates
           </button>
         </div>
@@ -379,20 +378,20 @@ function PaymentCard({ selectedCourse }) {
       </h3>
 
       <div className="mt-5 rounded-2xl bg-white p-4 text-center text-slate-950">
-  <img
-    src="/payment/MyQR.jpeg"
-    alt="UPI QR"
-    className="mx-auto h-44 w-44 rounded-xl object-contain"
-  />
+        <img
+          src="/payment/MyQR.jpeg"
+          alt="UPI QR"
+          className="mx-auto h-44 w-44 rounded-xl object-contain"
+        />
 
-  <p className="mt-3 text-sm font-extrabold">
-    electricalstudyworld@upi
-  </p>
+        <p className="mt-3 text-sm font-extrabold">
+          electricalstudyworld@upi
+        </p>
 
-  <p className="text-xs text-slate-500">
-    Scan QR and pay course fee
-  </p>
-</div>
+        <p className="text-xs text-slate-500">
+          Scan QR and pay course fee
+        </p>
+      </div>
 
       <div className="mt-5 space-y-3 text-sm text-slate-300">
         <p className="flex justify-between gap-4">
