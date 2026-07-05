@@ -74,12 +74,17 @@ async function request(path, options = {}) {
   }
 
   const contentType = response.headers.get('content-type') || ''
-
+  
   if (contentType.includes('application/json')) {
     return response.json()
   }
 
-  return response.text()
+  const text = await response.text()
+  if (text.trim().startsWith('<')) {
+    throw new Error('Server returned an HTML page instead of API data. Check API URL.')
+  }
+
+  return text
 }
 
 export const authApi = {

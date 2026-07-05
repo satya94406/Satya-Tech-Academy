@@ -63,6 +63,17 @@ public class SecurityConfig {
         .cors(cors -> {})
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .exceptionHandling(e -> e
+            .authenticationEntryPoint((request, response, authException) -> {
+                if (request.getRequestURI().startsWith("/api/")) {
+                    response.setContentType("application/json");
+                    response.setStatus(401);
+                    response.getWriter().write("{\"error\": \"Unauthorized\"}");
+                } else {
+                    response.sendRedirect("/oauth2/authorization/google");
+                }
+            })
+        )
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers("/api/auth/**", "/api/public/**", "/oauth2/**", "/login/oauth2/**").permitAll()
