@@ -74,7 +74,7 @@ async function request(path, options = {}) {
   }
 
   const contentType = response.headers.get('content-type') || ''
-  
+
   if (contentType.includes('application/json')) {
     return response.json()
   }
