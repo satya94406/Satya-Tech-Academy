@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 
 @Service
 @Async
 public class EmailService {
+  private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
+
   private final JavaMailSender mailSender;
 
   @Value("${app.admin-email}")
@@ -22,11 +26,19 @@ public class EmailService {
   @Value("${spring.mail.username:}")
   private String mailUsername;
 
+  @Value("${app.backend-url}")
+  private String backendUrl;
+
   public EmailService(JavaMailSender mailSender) {
     this.mailSender = mailSender;
   }
 
   public void sendAdminEnrollment(CourseEnrollment enrollment) {
+    String screenshotUrl = enrollment.getPaymentScreenshotUrl();
+    if (screenshotUrl != null && screenshotUrl.startsWith("/uploads")) {
+      screenshotUrl = backendUrl + screenshotUrl;
+    }
+
     String body = "New course enrollment received\n\n"
         + "Name: " + enrollment.getStudentName() + "\n"
         + "Email: " + enrollment.getStudentEmail() + "\n"
@@ -35,11 +47,12 @@ public class EmailService {
         + "Amount: ₹" + enrollment.getAmount() + "\n"
         + "Payment Method: " + enrollment.getPaymentMethod() + "\n"
         + "Transaction ID: " + enrollment.getTransactionId() + "\n"
-        + "Payment Screenshot/Link: " + enrollment.getPaymentScreenshotUrl() + "\n"
+        + "Payment Screenshot/Link: " + screenshotUrl + "\n"
         + "Status: PAYMENT_PENDING\n\n"
         + "Open Admin Dashboard: " + frontendUrl + "/admin" + "\n\n"
         + "Message: " + enrollment.getMessage();
 
+    logger.info("Admin email sending started for enrollment ID: {}", enrollment.getId());
     send(adminEmail, "New Course Enrollment Request", body);
   }
 
@@ -54,6 +67,7 @@ public class EmailService {
         + "Regards,\n"
         + "Satya Tech Academy";
 
+    logger.info("Student email sending started for payment approval of enrollment ID: {}", enrollment.getId());
     send(enrollment.getStudentEmail(), "Enrollment Approved - Satya Tech Academy", body);
   }
 
@@ -68,6 +82,7 @@ public class EmailService {
         + "Regards,\n"
         + "Satya Tech Academy";
 
+    logger.info("Student email sending started for payment rejection of enrollment ID: {}", enrollment.getId());
     send(enrollment.getStudentEmail(), "Payment Verification Update", body);
   }
 
@@ -79,6 +94,7 @@ public class EmailService {
         + "Status: PENDING\n\n"
         + "Open Admin Dashboard: " + frontendUrl + "/admin";
 
+    logger.info("Admin email sending started for certificate request ID: {}", request.getId());
     send(adminEmail, "New Certificate Request - Pending Approval", body);
   }
 
@@ -92,6 +108,7 @@ public class EmailService {
         + "Regards,\n"
         + "Satya Tech Academy";
 
+    logger.info("Student email sending started for certificate approval of request ID: {}", request.getId());
     send(request.getStudentEmail(), "Your Certificate is Ready", body);
   }
 
@@ -104,27 +121,30 @@ public class EmailService {
         + "Regards,\n"
         + "Satya Tech Academy";
 
+    logger.info("Student email sending started for certificate rejection of request ID: {}", request.getId());
     send(request.getStudentEmail(), "Certificate Request Update", body);
   }
 
   private void send(String to, String subject, String body) {
     if (mailUsername == null || mailUsername.isBlank()) {
-      System.out.println("\n--- EMAIL MOCK ---");
-      System.out.println("To: " + to);
-      System.out.println("Subject: " + subject);
-      System.out.println(body);
-      System.out.println("--- END EMAIL MOCK ---\n");
+      logger.info("\n--- EMAIL MOCK ---");
+      logger.info("To: {}", to);
+      logger.info("Subject: {}", subject);
+      logger.info("Body:\n{}", body);
+      logger.info("--- END EMAIL MOCK ---\n");
       return;
     }
 
     try {
       SimpleMailMessage message = new SimpleMailMessage();
+      message.setFrom(mailUsername);
       message.setTo(to);
       message.setSubject(subject);
       message.setText(body);
       mailSender.send(message);
+      logger.info("Email sent successfully to {}", to);
     } catch (Exception exception) {
-      System.out.println("Email failed: " + exception.getMessage());
+      logger.error("Email failed to send to {}", to, exception);
     }
   }
 }

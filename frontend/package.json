@@ -6,13 +6,14 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
-    "vite": "latest",
+    "html-to-image": "latest",
+    "jspdf": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-router-dom": "latest",
     "react-hot-toast": "latest",
-    "html-to-image": "latest",
-    "jspdf": "latest"
+    "react-razorpay": "^3.0.1",
+    "react-router-dom": "latest",
+    "vite": "latest"
   },
   "devDependencies": {
     "autoprefixer": "latest",

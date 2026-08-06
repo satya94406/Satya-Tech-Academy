@@ -1,6 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
 
 export const API_BASE = API_URL
+export const SERVER_URL = API_URL.replace('/api', '')
 
 export function getToken() {
   return localStorage.getItem('token')
@@ -50,10 +51,13 @@ async function request(path, options = {}) {
     method = 'GET',
     body,
     auth = true,
+    multipart = false,
   } = options
 
-  const headers = {
-    'Content-Type': 'application/json',
+  const headers = {}
+
+  if (!multipart) {
+    headers['Content-Type'] = 'application/json'
   }
 
   const token = getToken()
@@ -65,7 +69,7 @@ async function request(path, options = {}) {
   const response = await fetch(`${API_URL}${path}`, {
     method,
     headers,
-    body: body ? JSON.stringify(body) : undefined,
+    body: body ? (multipart ? body : JSON.stringify(body)) : undefined,
   })
 
   if (!response.ok) {
@@ -105,6 +109,7 @@ export const studentApi = {
   enroll: (data) => request('/student/enroll', {
     method: 'POST',
     body: data,
+    multipart: true,
   }),
 
   requestCertificate: (data) => request('/student/certificates/request', {
@@ -151,4 +156,20 @@ export const publicApi = {
   verify: (serialNo) => request(`/public/verify/${serialNo}`, {
     auth: false,
   }),
+}
+
+export const paymentApi = {
+  createOrder: (data) => request('/payment/create-order', {
+    method: 'POST',
+    body: data,
+  }),
+  
+  verify: (data) => request('/payment/verify', {
+    method: 'POST',
+    body: data,
+  }),
+}
+
+export const courseApi = {
+  getAll: () => request('/courses'),
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import Navbar from '../components/Navbar'
-import { adminApi } from '../utils/api'
+import { adminApi, SERVER_URL } from '../utils/api'
 
 const sidebarItems = [
   { key: 'overview', label: 'Dashboard', icon: '📊' },
@@ -151,8 +151,6 @@ export default function AdminDashboard() {
               <PaymentRequests
                 loading={loading}
                 enrollments={enrollments}
-                onApprove={approvePayment}
-                onReject={rejectPayment}
               />
             )}
 
@@ -186,7 +184,7 @@ function Overview({ pendingPayments, approvedPayments, pendingCertificates, enro
           Manage academy operations professionally
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400">
-          Verify manual payments, approve enrollments, manage certificate requests, and track student records from one clean dashboard.
+          View automated payments, approve enrollments, manage certificate requests, and track student records from one clean dashboard.
         </p>
 
         <div className="mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
@@ -209,17 +207,17 @@ function Overview({ pendingPayments, approvedPayments, pendingCertificates, enro
   )
 }
 
-function PaymentRequests({ loading, enrollments, onApprove, onReject }) {
+function PaymentRequests({ loading, enrollments }) {
   return (
     <section className="card-pro p-6 md:p-8">
       <p className="text-xs font-bold uppercase tracking-[4px] text-gold-400">
-        Payment Verification
+        Payment Records
       </p>
       <h2 className="mt-2 font-cinzel text-3xl font-extrabold text-[#fefce8]">
-        Manual Payment Requests
+        Enrollment Payments
       </h2>
       <p className="mt-2 text-sm text-slate-400">
-        Check transaction ID and screenshot link, then approve or reject the enrollment payment.
+        View all student payments processed securely via Razorpay.
       </p>
 
       <div className="mt-6 overflow-x-auto">
@@ -231,8 +229,6 @@ function PaymentRequests({ loading, enrollments, onApprove, onReject }) {
               <th>Amount</th>
               <th>Payment</th>
               <th>Status</th>
-              <th>Proof</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -249,25 +245,6 @@ function PaymentRequests({ loading, enrollments, onApprove, onReject }) {
                   <p className="text-xs text-slate-500">{enrollment.transactionId || '-'}</p>
                 </td>
                 <td><PaymentBadge status={enrollment.paymentStatus} /></td>
-                <td>
-                  {enrollment.paymentScreenshotUrl ? (
-                    <a href={enrollment.paymentScreenshotUrl} target="_blank" rel="noreferrer" className="font-bold text-gold-400">
-                      Open Proof
-                    </a>
-                  ) : '-'}
-                </td>
-                <td>
-                  {enrollment.paymentStatus === 'PAYMENT_PENDING' ? (
-                    <div className="flex flex-wrap gap-2">
-                      <button disabled={loading} onClick={() => onApprove(enrollment.id)} className="rounded-lg bg-green-500 px-3 py-2 text-xs font-extrabold text-green-950">
-                        Approve
-                      </button>
-                      <button disabled={loading} onClick={() => onReject(enrollment.id)} className="rounded-lg bg-red-500 px-3 py-2 text-xs font-extrabold text-white">
-                        Reject
-                      </button>
-                    </div>
-                  ) : '-'}
-                </td>
               </tr>
             ))}
           </tbody>

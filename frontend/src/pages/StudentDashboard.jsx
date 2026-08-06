@@ -1,20 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
+import { useRazorpay } from 'react-razorpay'
 
 import Navbar from '../components/Navbar'
-import { getUser, studentApi } from '../utils/api'
-
-const courses = [
-  { name: 'React Complete Course', price: 4999, duration: '10 Weeks' },
-  { name: 'JavaScript Deep Dive', price: 3999, duration: '8 Weeks' },
-  { name: 'Full Stack Web Development', price: 9999, duration: '20 Weeks' },
-  { name: 'REST API Development', price: 2999, duration: '4 Weeks' },
-  { name: 'Java with Spring Boot', price: 6999, duration: '12 Weeks' },
-  { name: 'Git and GitHub', price: 1499, duration: '2 Weeks' },
-  { name: 'Python for Data Science', price: 7999, duration: '14 Weeks' },
-  { name: 'DSA & System Design', price: 8999, duration: '16 Weeks' },
-  { name: 'DevOps & Cloud Fundamentals', price: 7999, duration: '12 Weeks' },
-]
+import { getUser, studentApi, paymentApi, courseApi } from '../utils/api'
 
 const sidebarItems = [
   { key: 'overview', label: 'Dashboard', icon: '🏠' },
@@ -25,8 +14,11 @@ const sidebarItems = [
 
 export default function StudentDashboard() {
   const user = getUser() || {}
+  const { Razorpay } = useRazorpay()
   const [activeTab, setActiveTab] = useState('overview')
   const [loading, setLoading] = useState(false)
+  
+  const [courses, setCourses] = useState([])
   const [certificateRequests, setCertificateRequests] = useState([])
   const [enrollments, setEnrollments] = useState([])
 
@@ -34,11 +26,7 @@ export default function StudentDashboard() {
     studentName: user.name || '',
     studentEmail: user.email || '',
     phone: '',
-    courseName: '',
-    amount: '',
-    paymentMethod: 'UPI',
-    transactionId: '',
-    paymentScreenshotUrl: '',
+    courseId: '',
     message: '',
   })
 
@@ -68,8 +56,8 @@ export default function StudentDashboard() {
   )
 
   const selectedCourse = useMemo(
-    () => courses.find((course) => course.name === enrollmentForm.courseName),
-    [enrollmentForm.courseName],
+    () => courses.find((course) => String(course.id) === String(enrollmentForm.courseId)),
+    [courses, enrollmentForm.courseId],
   )
 
   function updateEnrollment(key, value) {
@@ -86,67 +74,92 @@ export default function StudentDashboard() {
     }))
   }
 
-  function handleCourseChange(courseName) {
-    const course = courses.find((item) => item.name === courseName)
-
-    setEnrollmentForm((current) => ({
-      ...current,
-      courseName,
-      amount: course ? course.price : '',
-    }))
-  }
-
-
-  function handleScreenshotUpload(file) {
-    if (!file) {
-      return
-    }
-
-    const reader = new FileReader()
-
-    reader.onload = () => {
-      updateEnrollment('paymentScreenshotUrl', reader.result)
-    }
-
-    reader.readAsDataURL(file)
-  }
-
   async function loadData() {
-    const [myCertificates, myEnrollments] = await Promise.all([
+    const [myCertificates, myEnrollments, allCourses] = await Promise.all([
       studentApi.myCertificates(),
       studentApi.myEnrollments(),
+      courseApi.getAll(),
     ])
 
     setCertificateRequests(myCertificates)
     setEnrollments(myEnrollments)
+    setCourses(allCourses)
   }
 
   async function submitEnrollment(event) {
     event.preventDefault()
-    setLoading(true)
+    
+    if (!enrollmentForm.courseId) {
+      toast.error('Please select a course')
+      return
+    }
 
+    setLoading(true)
     try {
-      await studentApi.enroll({
-        ...enrollmentForm,
-        amount: Number(enrollmentForm.amount),
+      // 1. Create order
+      const orderData = await paymentApi.createOrder({
+        courseId: enrollmentForm.courseId,
+        studentName: enrollmentForm.studentName,
+        studentEmail: enrollmentForm.studentEmail,
+        phone: enrollmentForm.phone,
+        message: enrollmentForm.message,
       })
 
-      toast.success('Enrollment and payment proof submitted for admin verification')
+      // 2. Open Razorpay Checkout
+      const options = {
+        key: orderData.razorpayKey,
+        amount: orderData.amount * 100, // paise
+        currency: orderData.currency,
+        name: 'Satya Tech Academy',
+        description: orderData.courseName,
+        order_id: orderData.orderId,
+        handler: async (response) => {
+          try {
+            // 3. Verify Payment
+            await paymentApi.verify({
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpaySignature: response.razorpay_signature,
+              courseId: enrollmentForm.courseId,
+              studentName: enrollmentForm.studentName,
+              studentEmail: enrollmentForm.studentEmail,
+              phone: enrollmentForm.phone,
+              message: enrollmentForm.message,
+            })
+            
+            toast.success('Payment successful and enrollment approved!')
+            setEnrollmentForm((current) => ({
+              ...current,
+              phone: '',
+              courseId: '',
+              message: '',
+            }))
+            setActiveTab('payments')
+            await loadData()
+          } catch (err) {
+            toast.error('Payment verification failed. Please contact admin.')
+          }
+        },
+        prefill: {
+          name: enrollmentForm.studentName,
+          email: enrollmentForm.studentEmail,
+          contact: enrollmentForm.phone,
+        },
+        theme: {
+          color: '#d4af37', // Gold 400
+        },
+      }
 
-      setEnrollmentForm((current) => ({
-        ...current,
-        phone: '',
-        courseName: '',
-        amount: '',
-        transactionId: '',
-        paymentScreenshotUrl: '',
-        message: '',
-      }))
-
-      setActiveTab('payments')
-      await loadData()
+      const rzp = new Razorpay(options)
+      
+      rzp.on('payment.failed', function (response) {
+        toast.error(`Payment failed: ${response.error.description}`)
+      })
+      
+      rzp.open()
+      
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.message || 'Failed to initialize payment')
     } finally {
       setLoading(false)
     }
@@ -224,8 +237,6 @@ export default function StudentDashboard() {
                 form={enrollmentForm}
                 selectedCourse={selectedCourse}
                 onChange={updateEnrollment}
-                onCourseChange={handleCourseChange}
-                onScreenshotUpload={handleScreenshotUpload}
                 onSubmit={submitEnrollment}
               />
             )}
@@ -260,7 +271,7 @@ function Overview({ user, enrollments, pendingPayments, approvedCertificates, on
           Continue your learning journey, {user.name || 'Student'} 👋
         </h2>
         <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400">
-          Enroll in a course, submit payment proof, track payment verification, and request certificates after course completion.
+          Enroll in a course securely via Razorpay, track your payments, and request certificates after course completion.
         </p>
 
         <div className="mt-7 flex flex-col sm:flex-row flex-wrap gap-3">
@@ -282,7 +293,7 @@ function Overview({ user, enrollments, pendingPayments, approvedCertificates, on
   )
 }
 
-function EnrollCourse({ loading, courses, form, selectedCourse, onChange, onCourseChange, onScreenshotUpload, onSubmit }) {
+function EnrollCourse({ loading, courses, form, selectedCourse, onChange, onSubmit }) {
   return (
     <section className="card-pro p-6 md:p-8">
       <div className="mb-6">
@@ -290,10 +301,10 @@ function EnrollCourse({ loading, courses, form, selectedCourse, onChange, onCour
           Course Enrollment
         </p>
         <h2 className="mt-2 font-cinzel text-3xl font-extrabold text-[#fefce8]">
-          Enroll and Submit Payment Proof
+          Enroll Securely
         </h2>
         <p className="mt-2 text-sm text-slate-400">
-          Pay using UPI, QR, or bank transfer. Enter transaction ID and screenshot/link. Admin will verify and approve your enrollment.
+          Select a course and checkout securely via Razorpay. Your enrollment will be approved automatically upon successful payment.
         </p>
       </div>
 
@@ -309,45 +320,12 @@ function EnrollCourse({ loading, courses, form, selectedCourse, onChange, onCour
           <CourseSelect
             courses={courses}
             label="Select Course"
-            value={form.courseName}
-            onChange={onCourseChange}
-          />
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <Input label="Course Amount" type="number" value={form.amount} onChange={(value) => onChange('amount', value)} />
-            <Select
-              label="Payment Method"
-              value={form.paymentMethod}
-              onChange={(value) => onChange('paymentMethod', value)}
-              options={['UPI', 'QR Payment', 'Bank Transfer']}
-            />
-          </div>
-
-          <Input
-            label="Transaction ID / UTR Number"
-            value={form.transactionId}
-            onChange={(value) => onChange('transactionId', value)}
-            placeholder="Example: 412345678901"
+            value={form.courseId}
+            onChange={(value) => onChange('courseId', value)}
           />
 
           <div>
-            <label className="label-pro">Upload Payment Screenshot</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(event) => onScreenshotUpload(event.target.files?.[0])}
-              className="input-pro"
-              required={!form.paymentScreenshotUrl}
-            />
-            {form.paymentScreenshotUrl && (
-              <p className="mt-2 text-xs font-bold text-green-300">
-                Screenshot selected successfully
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="label-pro">Message</label>
+            <label className="label-pro">Message (Optional)</label>
             <textarea
               value={form.message}
               onChange={(event) => onChange('message', event.target.value)}
@@ -356,48 +334,28 @@ function EnrollCourse({ loading, courses, form, selectedCourse, onChange, onCour
             />
           </div>
 
-          <button disabled={loading} className="btn-primary w-full">
-            Submit Enrollment for Verification
+          <button disabled={loading || courses.length === 0} className="btn-primary w-full">
+            Proceed to Payment
           </button>
         </form>
 
-        <PaymentCard selectedCourse={selectedCourse} />
+        <CourseSummaryCard selectedCourse={selectedCourse} />
       </div>
     </section>
   )
 }
 
-function PaymentCard({ selectedCourse }) {
+function CourseSummaryCard({ selectedCourse }) {
   return (
-    <aside className="rounded-3xl border border-gold-500/20 bg-gold-500/[0.06] p-6">
+    <aside className="rounded-3xl border border-gold-500/20 bg-gold-500/[0.06] p-6 h-fit sticky top-24">
       <p className="text-xs font-bold uppercase tracking-[3px] text-gold-400">
-        Manual Payment
+        Order Summary
       </p>
       <h3 className="mt-2 font-cinzel text-2xl font-bold text-[#fefce8]">
-        Pay Course Fee
+        {selectedCourse ? selectedCourse.name : 'Select a course'}
       </h3>
 
-      <div className="mt-5 rounded-2xl bg-white p-4 text-center text-slate-950">
-        <img
-          src="/payment/MyQR.jpeg"
-          alt="UPI QR"
-          className="mx-auto h-44 w-44 rounded-xl object-contain"
-        />
-
-        <p className="mt-3 text-sm font-extrabold">
-          electricalstudyworld@upi
-        </p>
-
-        <p className="text-xs text-slate-500">
-          Scan QR and pay course fee
-        </p>
-      </div>
-
       <div className="mt-5 space-y-3 text-sm text-slate-300">
-        <p className="flex justify-between gap-4">
-          <span>Selected Course</span>
-          <span className="text-right font-bold text-white">{selectedCourse?.name || 'Not selected'}</span>
-        </p>
         <p className="flex justify-between gap-4">
           <span>Amount</span>
           <span className="font-bold text-gold-400">₹{selectedCourse?.price || 0}</span>
@@ -409,7 +367,7 @@ function PaymentCard({ selectedCourse }) {
       </div>
 
       <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4 text-xs leading-6 text-slate-400">
-        After payment, enter transaction ID and upload payment screenshot. Admin will verify your payment from the dashboard.
+        Payments are processed securely via Razorpay. Your enrollment is automatically approved upon successful transaction.
       </div>
     </aside>
   )
@@ -548,19 +506,6 @@ function Input({ label, value, onChange, type = 'text', placeholder }) {
   )
 }
 
-function Select({ label, value, onChange, options }) {
-  return (
-    <div>
-      <label className="label-pro">{label}</label>
-      <select value={value} onChange={(event) => onChange(event.target.value)} className="input-pro" required>
-        {options.map((option) => (
-          <option key={option} value={option}>{option}</option>
-        ))}
-      </select>
-    </div>
-  )
-}
-
 function CourseSelect({ courses, label, value, onChange }) {
   return (
     <div>
@@ -568,7 +513,7 @@ function CourseSelect({ courses, label, value, onChange }) {
       <select value={value} onChange={(event) => onChange(event.target.value)} className="input-pro" required>
         <option value="">Select course</option>
         {courses.map((course) => (
-          <option key={course.name} value={course.name}>
+          <option key={course.id} value={course.id}>
             {course.name} — ₹{course.price}
           </option>
         ))}

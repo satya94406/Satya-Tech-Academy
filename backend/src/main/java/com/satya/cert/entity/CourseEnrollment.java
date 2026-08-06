@@ -17,8 +17,7 @@ public class CourseEnrollment {
   private String paymentMethod;
   private String transactionId;
 
-  @Lob
-  @Column(columnDefinition = "TEXT")
+  @Column(length = 255)
   private String paymentScreenshotUrl;
 
   @Enumerated(EnumType.STRING)

@@ -11,6 +11,8 @@ import com.satya.cert.service.EmailService;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
+  private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+
   private final CourseEnrollmentRepository courseEnrollmentRepository;
   private final CertificateRequestRepository certificateRequestRepository;
   private final EmailService emailService;
@@ -46,6 +50,7 @@ public class AdminController {
 
   @PutMapping("/enrollments/{id}/approve-payment")
   public CourseEnrollment approvePayment(@PathVariable Long id) {
+    logger.info("Approval started for payment of enrollment ID: {}", id);
     CourseEnrollment enrollment = courseEnrollmentRepository.findById(id).orElseThrow();
     enrollment.setPaymentStatus(PaymentStatus.PAYMENT_APPROVED);
     enrollment.setPaymentApprovedAt(LocalDateTime.now());
@@ -83,6 +88,7 @@ public class AdminController {
 
   @PutMapping("/certificates/{id}/approve")
   public CertificateRequest approve(@PathVariable Long id) {
+    logger.info("Approval started for certificate request ID: {}", id);
     CertificateRequest request = certificateRequestRepository.findById(id).orElseThrow();
 
     request.setStatus(RequestStatus.APPROVED);
@@ -90,6 +96,7 @@ public class AdminController {
 
     if (request.getSerialNo() == null || request.getSerialNo().isBlank()) {
       request.setSerialNo(generateSerialNumber(request.getId()));
+      logger.info("Certificate generated with serial no: {} for request ID: {}", request.getSerialNo(), id);
     }
 
     CertificateRequest savedRequest = certificateRequestRepository.save(request);
