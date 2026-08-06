@@ -36,6 +36,12 @@ export default function Navbar() {
           <NavLink to="/" className={navLinkClass}>
             Home
           </NavLink>
+          <NavLink to="/about" className={navLinkClass}>
+            About
+          </NavLink>
+          <NavLink to="/contact" className={navLinkClass}>
+            Contact
+          </NavLink>
           <NavLink to="/verify" className={navLinkClass}>
             Verify
           </NavLink>
@@ -107,6 +113,12 @@ export default function Navbar() {
           <div className="flex flex-col gap-4">
             <NavLink to="/" onClick={closeMobileMenu} className={navLinkClass}>
               Home
+            </NavLink>
+            <NavLink to="/about" onClick={closeMobileMenu} className={navLinkClass}>
+              About
+            </NavLink>
+            <NavLink to="/contact" onClick={closeMobileMenu} className={navLinkClass}>
+              Contact
             </NavLink>
             <NavLink to="/verify" onClick={closeMobileMenu} className={navLinkClass}>
               Verify

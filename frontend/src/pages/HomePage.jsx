@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import Chatbot from '../components/Chatbot'
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const stats = [
   { value: '5000+', label: 'Students', icon: '🎓' },
@@ -339,9 +340,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="container-pro py-10 text-center text-sm text-slate-500">
-        © 2026 Satya Tech Academy. Learn · Build · Grow · Succeed.
-      </footer>
+      <Footer />
 
       <Chatbot />
     </div>

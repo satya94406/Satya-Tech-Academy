@@ -13,6 +13,12 @@ import AdminDashboard from './pages/AdminDashboard'
 import CertificatePage from './pages/CertificatePage'
 import VerifyPage from './pages/VerifyPage'
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler'
+import AboutPage from './pages/AboutPage'
+import ContactPage from './pages/ContactPage'
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
+import TermsPage from './pages/TermsPage'
+import RefundPolicyPage from './pages/RefundPolicyPage'
+import DeliveryPolicyPage from './pages/DeliveryPolicyPage'
 
 function ProtectedRoute({ role, children }) {
   const token = localStorage.getItem('token')
@@ -40,6 +46,12 @@ createRoot(document.getElementById('root')).render(
         <Route path="/verify" element={<VerifyPage />} />
         <Route path="/certificate/:serialNo" element={<CertificatePage />} />
         <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/refund-policy" element={<RefundPolicyPage />} />
+        <Route path="/delivery-policy" element={<DeliveryPolicyPage />} />
 
         <Route
           path="/student"

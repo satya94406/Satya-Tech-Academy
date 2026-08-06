@@ -17,7 +17,7 @@ export default function StudentDashboard() {
   const { Razorpay } = useRazorpay()
   const [activeTab, setActiveTab] = useState('overview')
   const [loading, setLoading] = useState(false)
-  
+
   const [courses, setCourses] = useState([])
   const [certificateRequests, setCertificateRequests] = useState([])
   const [enrollments, setEnrollments] = useState([])
@@ -88,7 +88,7 @@ export default function StudentDashboard() {
 
   async function submitEnrollment(event) {
     event.preventDefault()
-    
+
     if (!enrollmentForm.courseId) {
       toast.error('Please select a course')
       return
@@ -126,7 +126,7 @@ export default function StudentDashboard() {
               phone: enrollmentForm.phone,
               message: enrollmentForm.message,
             })
-            
+
             toast.success('Payment successful and enrollment approved!')
             setEnrollmentForm((current) => ({
               ...current,
@@ -151,13 +151,13 @@ export default function StudentDashboard() {
       }
 
       const rzp = new Razorpay(options)
-      
+
       rzp.on('payment.failed', function (response) {
         toast.error(`Payment failed: ${response.error.description}`)
       })
-      
+
       rzp.open()
-      
+
     } catch (error) {
       toast.error(error.message || 'Failed to initialize payment')
     } finally {
