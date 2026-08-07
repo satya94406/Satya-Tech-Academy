@@ -91,6 +91,7 @@ public class StudentController {
   @PostMapping("/certificates/request")
   public CertificateRequest requestCertificate(@RequestBody CertificateRequestDto request) {
     AppUser currentUser = currentUserService.user();
+    logger.info("Certificate request received for student: {}", currentUser.getEmail());
 
     CertificateRequest certificateRequest = new CertificateRequest();
     certificateRequest.setStudentName(request.studentName());
@@ -103,6 +104,8 @@ public class StudentController {
     certificateRequest.setUser(currentUser);
 
     CertificateRequest savedRequest = certificateRequestRepository.save(certificateRequest);
+    logger.info("Certificate request created with ID: {}", savedRequest.getId());
+    logger.info("Triggering admin notification email...");
     emailService.sendAdminCertificateRequest(savedRequest);
 
     return savedRequest;

@@ -88,7 +88,7 @@ public class AdminController {
 
   @PutMapping("/certificates/{id}/approve")
   public CertificateRequest approve(@PathVariable Long id) {
-    logger.info("Approval started for certificate request ID: {}", id);
+    logger.info("Admin is approving certificate request ID: {}", id);
     CertificateRequest request = certificateRequestRepository.findById(id).orElseThrow();
 
     request.setStatus(RequestStatus.APPROVED);
@@ -100,6 +100,7 @@ public class AdminController {
     }
 
     CertificateRequest savedRequest = certificateRequestRepository.save(request);
+    logger.info("Certificate saved with APPROVED status. Triggering student notification email...");
     emailService.sendStudentApproved(savedRequest);
 
     return savedRequest;

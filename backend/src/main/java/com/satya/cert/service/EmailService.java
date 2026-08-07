@@ -104,7 +104,7 @@ public class EmailService {
         + "Thank you,\n"
         + "Satya Tech Academy System";
 
-    logger.info("Admin email sending started for certificate request ID: {}", request.getId());
+    logger.info("Sending admin notification email for request ID: {}", request.getId());
     send(adminEmail, "📥 New Certificate Request Received – Satya Tech Academy", body);
   }
 
@@ -122,7 +122,7 @@ public class EmailService {
         + "[View Certificate]\n"
         + loginLink;
 
-    logger.info("Student email sending started for certificate approval of request ID: {}", request.getId());
+    logger.info("Sending user response email for request ID: {} to {}", request.getId(), request.getStudentEmail());
     send(request.getStudentEmail(), "🎉 Your Certificate Has Been Approved – Satya Tech Academy", body);
   }
 
@@ -141,6 +141,7 @@ public class EmailService {
 
   private void send(String to, String subject, String body) {
     if (mailUsername == null || mailUsername.isBlank()) {
+      logger.warn("SMTP Configuration Missing: MAIL_USERNAME is not set. Falling back to MOCK email.");
       logger.info("\n--- EMAIL MOCK ---");
       logger.info("To: {}", to);
       logger.info("Subject: {}", subject);
@@ -156,9 +157,9 @@ public class EmailService {
       message.setSubject(subject);
       message.setText(body);
       mailSender.send(message);
-      logger.info("Email sent successfully to {}", to);
+      logger.info("Email sent successfully to {} with subject: {}", to, subject);
     } catch (Exception exception) {
-      logger.error("Email failed to send to {}", to, exception);
+      logger.error("CRITICAL: Email failed to send to {}. Error: {}", to, exception.getMessage(), exception);
     }
   }
 }
