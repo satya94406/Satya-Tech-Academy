@@ -87,29 +87,43 @@ public class EmailService {
   }
 
   public void sendAdminCertificateRequest(CertificateRequest request) {
-    String body = "New certificate request received\n\n"
-        + "Student: " + request.getStudentName() + "\n"
-        + "Email: " + request.getStudentEmail() + "\n"
-        + "Course: " + request.getCourseName() + "\n"
-        + "Status: PENDING\n\n"
-        + "Open Admin Dashboard: " + frontendUrl + "/admin";
+    String loginLink = frontendUrl + "/admin/login?redirect=/admin/certificate-requests";
+    String requestedOn = request.getCreatedAt() != null ? request.getCreatedAt().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "N/A";
+
+    String body = "Hello Admin,\n\n"
+        + "A new certificate request has been submitted and is waiting for your review.\n\n"
+        + "Request Details\n\n"
+        + "Student Name: " + request.getStudentName() + "\n"
+        + "Student Email: " + request.getStudentEmail() + "\n"
+        + "Course Name: " + request.getCourseName() + "\n"
+        + "Request ID: " + request.getId() + "\n"
+        + "Requested On: " + requestedOn + "\n\n"
+        + "Please sign in to the Admin Dashboard to review and approve or reject this request.\n\n"
+        + "[Review Certificate Request]\n"
+        + loginLink + "\n\n"
+        + "Thank you,\n"
+        + "Satya Tech Academy System";
 
     logger.info("Admin email sending started for certificate request ID: {}", request.getId());
-    send(adminEmail, "New Certificate Request - Pending Approval", body);
+    send(adminEmail, "📥 New Certificate Request Received – Satya Tech Academy", body);
   }
 
   public void sendStudentApproved(CertificateRequest request) {
-    String certificateLink = frontendUrl + "/certificate/" + request.getSerialNo();
+    String loginLink = frontendUrl + "/login?redirect=/student/certificates";
 
-    String body = "Dear " + request.getStudentName() + ",\n\n"
-        + "Congratulations! Your certificate has been approved.\n\n"
-        + "Certificate Number: " + request.getSerialNo() + "\n"
-        + "View and Download: " + certificateLink + "\n\n"
-        + "Regards,\n"
-        + "Satya Tech Academy";
+    String body = "Hello " + request.getStudentName() + ",\n\n"
+        + "Congratulations!\n\n"
+        + "Your certificate request has been reviewed and approved.\n\n"
+        + "Certificate Details\n\n"
+        + "Course Name: " + request.getCourseName() + "\n"
+        + "Certificate ID: " + request.getSerialNo() + "\n"
+        + "Issue Date: " + request.getIssueDate() + "\n\n"
+        + "For security reasons, certificates can only be accessed after signing in to your account.\n\n"
+        + "[View Certificate]\n"
+        + loginLink;
 
     logger.info("Student email sending started for certificate approval of request ID: {}", request.getId());
-    send(request.getStudentEmail(), "Your Certificate is Ready", body);
+    send(request.getStudentEmail(), "🎉 Your Certificate Has Been Approved – Satya Tech Academy", body);
   }
 
   public void sendStudentRejected(CertificateRequest request) {
