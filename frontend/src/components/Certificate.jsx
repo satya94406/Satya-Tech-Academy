@@ -132,7 +132,7 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', marginTop: '16px', fontFamily: "'Outfit',sans-serif", fontSize: '8.5px', color: '#9a8060', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
           <span style={{ fontWeight: '700', color: '#7a5800' }}>Satya Tech Academy</span>
           <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#c8960c' }} />
-          <span>MSME Udyam Reg. No: UDYAM-UP-00-XXXXXXX</span>
+          <span>MSME Udyam Reg. No: UDYAM-UP-29-0251909</span>
         </div>
       </div>
     </div>
