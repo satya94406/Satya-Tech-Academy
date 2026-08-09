@@ -3,8 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { getUser, logout } from '../utils/api'
 
 const navLinkClass = ({ isActive }) =>
-  `text-sm font-semibold tracking-wide transition ${
-    isActive ? 'text-gold-400' : 'text-slate-300 hover:text-white'
+  `text-sm font-semibold tracking-wide transition ${isActive ? 'text-gold-400' : 'text-slate-300 hover:text-white'
   }`
 
 export default function Navbar() {
@@ -20,15 +19,11 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#070812]/90 backdrop-blur-md">
       <div className="container-pro flex h-16 items-center justify-between">
         <Link to="/" onClick={closeMobileMenu} className="flex items-center gap-3 transition hover:opacity-90">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-            <span className="font-outfit text-base font-extrabold">STA</span>
-          </div>
-
-          <div>
-            <p className="font-outfit text-base font-extrabold leading-none text-white tracking-wide">
-              Satya Tech Academy
-            </p>
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="Satya Tech Academy Logo" 
+            className="h-10 w-auto object-contain md:h-12" 
+          />
         </Link>
 
         {/* Desktop Nav */}

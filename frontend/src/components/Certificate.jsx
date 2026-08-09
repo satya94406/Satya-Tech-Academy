@@ -45,16 +45,20 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
         </svg>
       ))}
       {/* Watermark */}
-      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', fontSize: '180px', fontWeight: '800', color: 'rgba(200,150,12,0.04)', fontFamily: "'Cinzel',serif", letterSpacing: '10px', userSelect: 'none', zIndex: 2, whiteSpace: 'nowrap' }}>SDA</div>
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', zIndex: 2, opacity: 0.04, userSelect: 'none', pointerEvents: 'none' }}>
+        <img src="/logo.png" alt="" style={{ height: '300px', width: 'auto', objectFit: 'contain' }} />
+      </div>
 
       {/* Content */}
       <div style={{ position: 'absolute', inset: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', zIndex: 4, padding: '18px 50px' }}>
 
         {/* Logo */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-          <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'linear-gradient(145deg,#0f172a,#1e3a5f)', border: '3px solid #c8960c', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(200,150,12,0.3)' }}>
-            <span style={{ color: '#f5c842', fontFamily: "'Cinzel',serif", fontWeight: '800', fontSize: '20px', letterSpacing: '1px' }}>STA</span>
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="Satya Tech Academy Logo" 
+            style={{ height: '60px', width: 'auto', objectFit: 'contain' }} 
+          />
           <div style={{ fontFamily: "'Cinzel',serif", fontSize: '13px', fontWeight: '600', color: '#7a5800', letterSpacing: '5px', textTransform: 'uppercase' }}>Satya Tech Academy</div>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: '9px', color: '#a07830', letterSpacing: '4px', textTransform: 'uppercase' }}>Learn · Build · Grow · Succeed</div>
         </div>

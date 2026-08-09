@@ -7,14 +7,11 @@ export default function Footer() {
         {/* Brand */}
         <div className="space-y-4">
           <Link to="/" className="flex items-center gap-3 transition hover:opacity-90">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-              <span className="font-outfit text-base font-extrabold">STA</span>
-            </div>
-            <div>
-              <p className="font-outfit text-base font-extrabold leading-none text-white tracking-wide">
-                Satya Tech Academy
-              </p>
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="Satya Tech Academy Logo" 
+              className="h-10 w-auto object-contain md:h-12" 
+            />
           </Link>
           <p className="leading-6 text-slate-400">
             Empowering students with practical coding skills, mentorship, and career-focused learning.
