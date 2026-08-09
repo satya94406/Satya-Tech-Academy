@@ -51,23 +51,23 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
 
         {/* Logo */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-          <div style={{ 
-            height: '96px', 
-            width: '96px', 
-            borderRadius: '50%', 
-            backgroundColor: '#000000', 
-            display: 'flex', 
-            alignItems: 'center', 
+          <div style={{
+            height: '96px',
+            width: '96px',
+            borderRadius: '50%',
+            backgroundColor: '#000000',
+            display: 'flex',
+            alignItems: 'center',
             justifyContent: 'center',
             boxShadow: '0 4px 12px rgba(180,130,0,0.25)',
             border: '1.5px solid rgba(200,150,12,0.4)',
             padding: '0px',
             overflow: 'hidden'
           }}>
-            <img 
-              src="/logo.png" 
-              alt="Satya Tech Academy Logo" 
-              style={{ height: '100%', width: '100%', objectFit: 'contain', transform: 'scale(1.4)' }} 
+            <img
+              src="/logo.png"
+              alt="Satya Tech Academy Logo"
+              style={{ height: '100%', width: '100%', objectFit: 'contain', transform: 'scale(1.4)' }}
             />
           </div>
           <div style={{ fontFamily: "'Cinzel',serif", fontSize: '13px', fontWeight: '600', color: '#7a5800', letterSpacing: '5px', textTransform: 'uppercase' }}>Satya Tech Academy</div>
@@ -86,6 +86,7 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
           <div style={{ fontFamily: "'Cinzel',serif", fontSize: '42px', fontWeight: '700', color: '#1a1200', letterSpacing: '8px', textTransform: 'uppercase' }}>CERTIFICATE</div>
           <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: '11px', letterSpacing: '10px', color: '#7a5800', textTransform: 'uppercase', marginTop: '6px' }}>of  Completion</div>
         </div>
+
 
         {/* Student Name */}
         <div style={{ textAlign: 'center' }}>
@@ -131,9 +132,7 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', marginTop: '16px', fontFamily: "'Outfit',sans-serif", fontSize: '8.5px', color: '#9a8060', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
           <span style={{ fontWeight: '700', color: '#7a5800' }}>Satya Tech Academy</span>
           <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#c8960c' }} />
-          <span>Ghaziabad, Uttar Pradesh, India</span>
-          <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#c8960c' }} />
-          <span>satya-tech-academy.vercel.app</span>
+          <span>MSME Udyam Reg. No: UDYAM-UP-00-XXXXXXX</span>
         </div>
       </div>
     </div>
