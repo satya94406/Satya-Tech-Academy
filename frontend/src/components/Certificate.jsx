@@ -52,16 +52,17 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
         {/* Logo */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
           <div style={{ 
-            height: '64px', 
-            width: '64px', 
+            height: '80px', 
+            width: '80px', 
             borderRadius: '50%', 
-            backgroundColor: '#ffffff', 
+            backgroundColor: '#000000', 
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
-            boxShadow: '0 4px 12px rgba(180,130,0,0.15)',
-            border: '1px solid rgba(200,150,12,0.2)',
-            padding: '8px'
+            boxShadow: '0 4px 12px rgba(180,130,0,0.25)',
+            border: '1.5px solid rgba(200,150,12,0.4)',
+            padding: '10px',
+            overflow: 'hidden'
           }}>
             <img 
               src="/logo.png" 
