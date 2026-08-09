@@ -52,8 +52,8 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
         {/* Logo */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
           <div style={{ 
-            height: '80px', 
-            width: '80px', 
+            height: '96px', 
+            width: '96px', 
             borderRadius: '50%', 
             backgroundColor: '#000000', 
             display: 'flex', 
@@ -61,13 +61,13 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
             justifyContent: 'center',
             boxShadow: '0 4px 12px rgba(180,130,0,0.25)',
             border: '1.5px solid rgba(200,150,12,0.4)',
-            padding: '10px',
+            padding: '0px',
             overflow: 'hidden'
           }}>
             <img 
               src="/logo.png" 
               alt="Satya Tech Academy Logo" 
-              style={{ height: '100%', width: '100%', objectFit: 'contain' }} 
+              style={{ height: '100%', width: '100%', objectFit: 'contain', transform: 'scale(1.4)' }} 
             />
           </div>
           <div style={{ fontFamily: "'Cinzel',serif", fontSize: '13px', fontWeight: '600', color: '#7a5800', letterSpacing: '5px', textTransform: 'uppercase' }}>Satya Tech Academy</div>
