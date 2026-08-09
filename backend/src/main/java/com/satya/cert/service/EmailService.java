@@ -3,8 +3,9 @@ package com.satya.cert.service;
 import com.satya.cert.entity.CertificateRequest;
 import com.satya.cert.entity.CourseEnrollment;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,9 @@ public class EmailService {
 
   @Value("${spring.mail.username:}")
   private String mailUsername;
+
+  @Value("${app.mail-from:Satya Tech Academy}")
+  private String mailFrom;
 
   @Value("${app.backend-url}")
   private String backendUrl;
@@ -151,11 +155,14 @@ public class EmailService {
     }
 
     try {
-      SimpleMailMessage message = new SimpleMailMessage();
-      message.setFrom(mailUsername);
-      message.setTo(to);
-      message.setSubject(subject);
-      message.setText(body);
+      MimeMessage message = mailSender.createMimeMessage();
+      MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+      
+      helper.setFrom(mailFrom);
+      helper.setTo(to);
+      helper.setSubject(subject);
+      helper.setText(body);
+      
       mailSender.send(message);
       logger.info("Email sent successfully to {} with subject: {}", to, subject);
     } catch (Exception exception) {

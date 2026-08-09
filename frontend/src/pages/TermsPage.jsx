@@ -70,7 +70,7 @@ export default function TermsPage() {
           <section>
             <h2 className="font-cinzel text-2xl font-bold text-white mb-3">8. Contact Us</h2>
             <p>
-              For any questions regarding these terms, contact us at: <a href="mailto:electricalstudyworld@gmail.com" className="text-gold-400 hover:underline">electricalstudyworld@gmail.com</a>
+              For any questions regarding these terms, contact us at: <a href="mailto:support@satya-tech-academy.com" className="text-gold-400 hover:underline">support@satya-tech-academy.com</a>
             </p>
           </section>
         </div>

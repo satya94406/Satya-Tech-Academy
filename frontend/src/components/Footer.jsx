@@ -45,7 +45,7 @@ export default function Footer() {
         <div className="space-y-4">
           <h3 className="font-bold text-white uppercase tracking-wider text-xs">Contact</h3>
           <ul className="space-y-2">
-            <li>Email: <a href="mailto:electricalstudyworld@gmail.com" className="text-gold-400 hover:underline">electricalstudyworld@gmail.com</a></li>
+            <li>Email: <a href="mailto:support@satya-tech-academy.com" className="text-gold-400 hover:underline">support@satya-tech-academy.com</a></li>
             <li>Phone: <a href="tel:9315358737" className="text-gold-400 hover:underline">+91 9315358737</a></li>
             <li>Response Time: Within 24 hours</li>
           </ul>

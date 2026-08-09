@@ -37,7 +37,7 @@ spring.mail.password=YOUR_GMAIL_APP_PASSWORD
 Default admin login:
 
 ```text
-email: electricalstudyworld@gmail.com
+email: support@satya-tech-academy.com
 password: admin12345
 ```
 

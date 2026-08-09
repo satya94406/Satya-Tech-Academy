@@ -57,7 +57,7 @@ public class StudentController {
 
     CourseEnrollment enrollment = new CourseEnrollment();
     enrollment.setStudentName(request.studentName());
-    enrollment.setStudentEmail(request.studentEmail());
+    enrollment.setStudentEmail(currentUser.getEmail());
     enrollment.setPhone(request.phone());
     enrollment.setCourseName(request.courseName());
     enrollment.setAmount(request.amount());
@@ -95,7 +95,7 @@ public class StudentController {
 
     CertificateRequest certificateRequest = new CertificateRequest();
     certificateRequest.setStudentName(request.studentName());
-    certificateRequest.setStudentEmail(request.studentEmail());
+    certificateRequest.setStudentEmail(currentUser.getEmail());
     certificateRequest.setCourseName(request.courseName());
     certificateRequest.setInstructorName(resolveInstructorName(request.instructorName()));
     certificateRequest.setDuration(request.duration());

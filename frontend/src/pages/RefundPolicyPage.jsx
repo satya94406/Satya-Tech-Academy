@@ -57,7 +57,7 @@ export default function RefundPolicyPage() {
           <section>
             <h2 className="font-cinzel text-2xl font-bold text-white mb-3">6. Contact for Issues</h2>
             <p>
-              If you experience a payment failure where the amount was deducted but the course was not assigned, or if you wish to report a duplicate payment, please email us immediately at: <a href="mailto:electricalstudyworld@gmail.com" className="text-gold-400 hover:underline">electricalstudyworld@gmail.com</a>
+              If you experience a payment failure where the amount was deducted but the course was not assigned, or if you wish to report a duplicate payment, please email us immediately at: <a href="mailto:support@satya-tech-academy.com" className="text-gold-400 hover:underline">support@satya-tech-academy.com</a>
             </p>
           </section>
         </div>

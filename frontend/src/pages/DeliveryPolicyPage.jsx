@@ -46,7 +46,7 @@ export default function DeliveryPolicyPage() {
           <section>
             <h2 className="font-cinzel text-2xl font-bold text-white mb-3">5. Contact Information</h2>
             <p>
-              For any issues regarding course access or delivery of your digital content, please reach out to us at: <a href="mailto:electricalstudyworld@gmail.com" className="text-gold-400 hover:underline">electricalstudyworld@gmail.com</a>
+              For any issues regarding course access or delivery of your digital content, please reach out to us at: <a href="mailto:support@satya-tech-academy.com" className="text-gold-400 hover:underline">support@satya-tech-academy.com</a>
             </p>
           </section>
         </div>

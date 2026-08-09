@@ -91,6 +91,7 @@ public class AdminController {
     logger.info("Admin is approving certificate request ID: {}", id);
     CertificateRequest request = certificateRequestRepository.findById(id).orElseThrow();
 
+    boolean wasAlreadyApproved = request.getStatus() == RequestStatus.APPROVED;
     request.setStatus(RequestStatus.APPROVED);
     request.setApprovedAt(LocalDateTime.now());
 
@@ -100,8 +101,13 @@ public class AdminController {
     }
 
     CertificateRequest savedRequest = certificateRequestRepository.save(request);
-    logger.info("Certificate saved with APPROVED status. Triggering student notification email...");
-    emailService.sendStudentApproved(savedRequest);
+    
+    if (!wasAlreadyApproved) {
+      logger.info("Certificate saved with APPROVED status. Triggering student notification email...");
+      emailService.sendStudentApproved(savedRequest);
+    } else {
+      logger.info("Certificate was already APPROVED. Skipping student notification email.");
+    }
 
     return savedRequest;
   }

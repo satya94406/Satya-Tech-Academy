@@ -61,7 +61,7 @@ export default function PrivacyPolicyPage() {
             <h2 className="font-cinzel text-2xl font-bold text-white mb-3">7. Contact Us</h2>
             <p>
               If you have any questions or concerns regarding this Privacy Policy, please contact us at: <br />
-              <a href="mailto:electricalstudyworld@gmail.com" className="text-gold-400 hover:underline">electricalstudyworld@gmail.com</a>
+              <a href="mailto:support@satya-tech-academy.com" className="text-gold-400 hover:underline">support@satya-tech-academy.com</a>
             </p>
           </section>
         </div>
