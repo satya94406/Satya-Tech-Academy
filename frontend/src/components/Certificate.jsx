@@ -124,7 +124,7 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
             <div style={{ fontFamily: "'Great Vibes',cursive", fontSize: '26px', color: '#1a1200', marginBottom: '5px', lineHeight: 1.2 }}>{instructorName}</div>
             <div style={{ width: '140px', height: '1px', background: 'linear-gradient(90deg,transparent,#c8960c,transparent)' }} />
             <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: '9px', color: '#1a2a4a', fontWeight: '600', letterSpacing: '1px', marginTop: '5px' }}>{instructorName}</div>
-            <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: '8px', color: '#9a8060', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '2px' }}>Director, SDA</div>
+            <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: '8px', color: '#9a8060', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '2px' }}>Director, STA</div>
           </div>
         </div>
 
