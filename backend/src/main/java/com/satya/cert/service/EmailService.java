@@ -94,7 +94,7 @@ public class EmailService {
   }
 
   public void sendAdminCertificateRequest(CertificateRequest request) {
-    String loginLink = frontendUrl + "/admin/login?redirect=/admin/certificate-requests";
+    String loginLink = frontendUrl + "/admin";
     String requestedOn = request.getCreatedAt() != null ? request.getCreatedAt().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "N/A";
 
     String body = "<div style=\"font-family: sans-serif; color: #333;\">"
@@ -123,7 +123,7 @@ public class EmailService {
   }
 
   public void sendStudentApproved(CertificateRequest request) {
-    String loginLink = frontendUrl + "/login?redirect=/student/certificates";
+    String loginLink = frontendUrl + "/student";
 
     String body = "<div style=\"font-family: sans-serif; color: #333;\">"
         + "<p>Hello " + request.getStudentName() + ",</p>"
@@ -151,7 +151,7 @@ public class EmailService {
 
   public void sendStudentRejected(CertificateRequest request) {
     String reason = request.getAdminRemark() == null ? "Contact admin" : request.getAdminRemark();
-    String loginLink = frontendUrl + "/login?redirect=/student/certificates";
+    String loginLink = frontendUrl + "/student";
 
     String body = "<div style=\"font-family: sans-serif; color: #333;\">"
         + "<p>Dear " + request.getStudentName() + ",</p>"
