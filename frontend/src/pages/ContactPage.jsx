@@ -51,8 +51,8 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-xs font-bold uppercase text-slate-500 mb-1">Email Address</p>
-                  <a href="mailto:support@satya-tech-academy.com" className="text-gold-400 hover:underline">
-                    support@satya-tech-academy.com
+                  <a href="mailto:electricalstudyworld@gmail.com" className="text-gold-400 hover:underline">
+                    electricalstudyworld@gmail.com
                   </a>
                 </div>
                 <div>
