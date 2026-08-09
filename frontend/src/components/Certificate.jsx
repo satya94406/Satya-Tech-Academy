@@ -126,6 +126,15 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
             <div style={{ fontFamily: "'Outfit',sans-serif", fontSize: '8px', color: '#9a8060', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '2px' }}>Director, SDA</div>
           </div>
         </div>
+
+        {/* Organization Info Sub-footer */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', marginTop: '16px', fontFamily: "'Outfit',sans-serif", fontSize: '8.5px', color: '#9a8060', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+          <span style={{ fontWeight: '700', color: '#7a5800' }}>Satya Tech Academy</span>
+          <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#c8960c' }} />
+          <span>Ghaziabad, Uttar Pradesh, India</span>
+          <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#c8960c' }} />
+          <span>satya-tech-academy.vercel.app</span>
+        </div>
       </div>
     </div>
   )
