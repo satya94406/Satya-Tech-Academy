@@ -176,11 +176,11 @@ export default function AdminDashboard() {
 function Overview({ pendingPayments, approvedPayments, pendingCertificates, enrollments, onNavigate }) {
   return (
     <div className="space-y-6">
-      <section className="card-pro p-8">
+      <section className="card-pro p-5 md:p-8">
         <p className="text-xs font-bold uppercase tracking-[4px] text-gold-400">
           Admin Dashboard
         </p>
-        <h2 className="mt-2 font-cinzel text-3xl font-extrabold text-[#fefce8] md:text-4xl">
+        <h2 className="mt-2 font-cinzel text-2xl font-extrabold text-[#fefce8] break-words md:text-3xl lg:text-4xl">
           Manage academy operations professionally
         </h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400">

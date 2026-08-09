@@ -263,11 +263,11 @@ export default function StudentDashboard() {
 function Overview({ user, enrollments, pendingPayments, approvedCertificates, onNavigate }) {
   return (
     <div className="space-y-6">
-      <section className="card-pro overflow-hidden p-8">
+      <section className="card-pro overflow-hidden p-5 md:p-8">
         <p className="text-xs font-bold uppercase tracking-[4px] text-gold-400">
           Welcome Back
         </p>
-        <h2 className="mt-3 font-cinzel text-3xl font-extrabold text-[#fefce8] md:text-4xl">
+        <h2 className="mt-3 font-cinzel text-2xl font-extrabold text-[#fefce8] break-words md:text-3xl lg:text-4xl">
           Continue your learning journey, {user.name || 'Student'} 👋
         </h2>
         <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-400">
