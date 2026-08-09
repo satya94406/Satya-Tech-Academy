@@ -67,7 +67,7 @@ const Certificate = React.forwardRef(({ data = {} }, ref) => {
             <img
               src="/logo.png"
               alt="Satya Tech Academy Logo"
-              style={{ height: '100%', width: '100%', objectFit: 'contain', transform: 'scale(1.4)' }}
+              style={{ height: '100%', width: '100%', objectFit: 'contain', transform: 'scale(1.25)' }}
             />
           </div>
           <div style={{ fontFamily: "'Cinzel',serif", fontSize: '13px', fontWeight: '600', color: '#7a5800', letterSpacing: '5px', textTransform: 'uppercase' }}>Satya Tech Academy</div>
