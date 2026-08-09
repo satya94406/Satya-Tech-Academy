@@ -22,7 +22,7 @@ export default function Navbar() {
           <img 
             src="/logo.png" 
             alt="Satya Tech Academy Logo" 
-            className="h-10 w-auto object-contain md:h-12" 
+            className="h-11 w-11 rounded-full object-cover shadow-[0_0_15px_rgba(245,158,11,0.3)] md:h-12 md:w-12" 
           />
         </Link>
 
