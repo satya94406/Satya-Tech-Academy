@@ -136,7 +136,7 @@ export default function AdminDashboard() {
             </nav>
           </aside>
 
-          <section>
+          <section className="min-w-0">
             {activeTab === 'overview' && (
               <Overview
                 pendingPayments={pendingPayments}
