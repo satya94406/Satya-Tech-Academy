@@ -5,7 +5,7 @@ import com.satya.cert.entity.CourseEnrollment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.MailConnectException;
+import org.springframework.mail.MailException;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailSendException;
 import jakarta.mail.internet.MimeMessage;
@@ -168,12 +168,12 @@ public class EmailService {
       
       mailSender.send(message);
       logger.info("Email sent successfully to {} with subject: {}", to, subject);
-    } catch (MailConnectException exception) {
-      logger.error("SMTP CONNECTION ERROR: Failed to connect to SMTP server. Ensure the port (e.g., 2525) is not blocked by your hosting provider's firewall.");
     } catch (MailAuthenticationException exception) {
       logger.error("SMTP AUTHENTICATION ERROR: Failed to authenticate. Verify your MAIL_USERNAME and MAIL_PASSWORD environment variables are correct.");
     } catch (MailSendException exception) {
       logger.error("SMTP SEND ERROR: Failed to deliver email to {}. The recipient address might be invalid or rejected by the server.", to);
+    } catch (MailException exception) {
+      logger.error("SMTP CONNECTION/GENERAL ERROR: Failed to connect to SMTP server. Ensure the port (e.g., 2525) is not blocked. Error: {}", exception.getMessage());
     } catch (Exception exception) {
       logger.error("CRITICAL SMTP ERROR: An unexpected error occurred while sending email to {}. Error: {}", to, exception.getMessage());
     }
