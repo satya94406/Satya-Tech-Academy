@@ -31,7 +31,7 @@ export default function ContactPage() {
       <main className="container-pro py-20 md:py-32">
         <div className="mx-auto max-w-3xl text-center mb-16">
           <p className="text-xs font-bold uppercase tracking-[4px] text-gold-400">Contact Us</p>
-          <h1 className="mt-4 font-cinzel text-4xl font-extrabold text-white md:text-5xl">
+          <h1 className="mt-4 font-cinzel text-3xl font-extrabold text-white sm:text-4xl md:text-5xl">
             We'd love to hear from you
           </h1>
           <p className="mt-6 text-lg text-slate-400">

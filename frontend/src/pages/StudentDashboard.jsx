@@ -202,7 +202,7 @@ export default function StudentDashboard() {
               <p className="mt-1 text-xs text-slate-400">{user.email}</p>
             </div>
 
-            <nav className="mt-4 flex overflow-x-auto gap-2 pb-2 lg:flex-col lg:overflow-visible lg:pb-0 hide-scrollbar">
+            <nav className="mt-4 -mx-4 flex overflow-x-auto gap-2 px-4 pb-2 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0 hide-scrollbar">
               {sidebarItems.map((item) => (
                 <button
                   key={item.key}

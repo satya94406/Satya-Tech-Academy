@@ -168,7 +168,7 @@ export default function HomePage() {
               Satya Tech Academy
             </div>
 
-            <h1 className="font-outfit text-5xl font-extrabold leading-[1.15] text-white sm:text-6xl lg:text-7xl">
+            <h1 className="font-outfit text-4xl font-extrabold leading-[1.15] text-white sm:text-5xl lg:text-7xl">
               Learn Coding From Basic To
               <span className="text-gradient-gold block mt-2">Job Ready Level.</span>
             </h1>

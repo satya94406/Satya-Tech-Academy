@@ -6,11 +6,13 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at top left, rgba(245, 158, 11, 0.14), transparent 35%),
     radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.12), transparent 30%),
@@ -33,7 +35,7 @@ textarea {
 }
 
 .page-shell {
-  @apply min-h-screen text-slate-100;
+  @apply min-h-[100dvh] text-slate-100 overflow-x-hidden flex flex-col;
 }
 
 .container-pro {
