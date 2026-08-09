@@ -97,56 +97,89 @@ public class EmailService {
     String loginLink = frontendUrl + "/admin/login?redirect=/admin/certificate-requests";
     String requestedOn = request.getCreatedAt() != null ? request.getCreatedAt().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "N/A";
 
-    String body = "Hello Admin,\n\n"
-        + "A new certificate request has been submitted and is waiting for your review.\n\n"
-        + "Request Details\n\n"
-        + "Student Name: " + request.getStudentName() + "\n"
-        + "Student Email: " + request.getStudentEmail() + "\n"
-        + "Course Name: " + request.getCourseName() + "\n"
-        + "Request ID: " + request.getId() + "\n"
-        + "Requested On: " + requestedOn + "\n\n"
-        + "Please sign in to the Admin Dashboard to review and approve or reject this request.\n\n"
-        + "[Review Certificate Request]\n"
-        + loginLink + "\n\n"
-        + "Thank you,\n"
-        + "Satya Tech Academy System";
+    String body = "<div style=\"font-family: sans-serif; color: #333;\">"
+        + "<p>Hello Admin,</p>"
+        + "<p>A new certificate request has been submitted and is waiting for your review.</p>"
+        + "<h3 style=\"margin-top: 24px;\">Request Details</h3>"
+        + "<ul style=\"list-style: none; padding-left: 0;\">"
+        + "<li style=\"margin-bottom: 8px;\"><strong>Student Name:</strong> " + request.getStudentName() + "</li>"
+        + "<li style=\"margin-bottom: 8px;\"><strong>Student Email:</strong> " + request.getStudentEmail() + "</li>"
+        + "<li style=\"margin-bottom: 8px;\"><strong>Course Name:</strong> " + request.getCourseName() + "</li>"
+        + "<li style=\"margin-bottom: 8px;\"><strong>Request ID:</strong> " + request.getId() + "</li>"
+        + "<li style=\"margin-bottom: 8px;\"><strong>Requested On:</strong> " + requestedOn + "</li>"
+        + "</ul>"
+        + "<p style=\"margin-top: 24px;\">Please sign in to the Admin Dashboard to review and approve or reject this request.</p>"
+        + "<p style=\"margin: 24px 0;\">"
+        + "  <a href=\"" + loginLink + "\""
+        + "     style=\"display:inline-block; padding:12px 24px; background-color:#2563eb; color:#ffffff; text-decoration:none; border-radius:6px; font-weight:600;\">"
+        + "    Review Request"
+        + "  </a>"
+        + "</p>"
+        + "<p>Thank you,<br>Satya Tech Academy System</p>"
+        + "</div>";
 
     logger.info("Sending admin notification email for request ID: {}", request.getId());
-    send(adminEmail, "📥 New Certificate Request Received – Satya Tech Academy", body);
+    send(adminEmail, "📥 New Certificate Request Received – Satya Tech Academy", body, true);
   }
 
   public void sendStudentApproved(CertificateRequest request) {
     String loginLink = frontendUrl + "/login?redirect=/student/certificates";
 
-    String body = "Hello " + request.getStudentName() + ",\n\n"
-        + "Congratulations!\n\n"
-        + "Your certificate request has been reviewed and approved.\n\n"
-        + "Certificate Details\n\n"
-        + "Course Name: " + request.getCourseName() + "\n"
-        + "Certificate ID: " + request.getSerialNo() + "\n"
-        + "Issue Date: " + request.getIssueDate() + "\n\n"
-        + "For security reasons, certificates can only be accessed after signing in to your account.\n\n"
-        + "[View Certificate]\n"
-        + loginLink;
+    String body = "<div style=\"font-family: sans-serif; color: #333;\">"
+        + "<p>Hello " + request.getStudentName() + ",</p>"
+        + "<p>Congratulations!</p>"
+        + "<p>Your certificate request has been reviewed and approved.</p>"
+        + "<h3 style=\"margin-top: 24px;\">Certificate Details</h3>"
+        + "<ul style=\"list-style: none; padding-left: 0;\">"
+        + "<li style=\"margin-bottom: 8px;\"><strong>Course Name:</strong> " + request.getCourseName() + "</li>"
+        + "<li style=\"margin-bottom: 8px;\"><strong>Certificate ID:</strong> " + request.getSerialNo() + "</li>"
+        + "<li style=\"margin-bottom: 8px;\"><strong>Issue Date:</strong> " + request.getIssueDate() + "</li>"
+        + "</ul>"
+        + "<p style=\"margin-top: 24px;\">For security reasons, certificates can only be accessed after signing in to your account.</p>"
+        + "<p style=\"margin: 24px 0;\">"
+        + "  <a href=\"" + loginLink + "\""
+        + "     style=\"display:inline-block; padding:12px 24px; background-color:#2563eb; color:#ffffff; text-decoration:none; border-radius:6px; font-weight:600;\">"
+        + "    View Certificate"
+        + "  </a>"
+        + "</p>"
+        + "<p>Regards,<br>Satya Tech Academy</p>"
+        + "</div>";
 
     logger.info("Sending user response email for request ID: {} to {}", request.getId(), request.getStudentEmail());
-    send(request.getStudentEmail(), "🎉 Your Certificate Has Been Approved – Satya Tech Academy", body);
+    send(request.getStudentEmail(), "🎉 Your Certificate Has Been Approved – Satya Tech Academy", body, true);
   }
 
   public void sendStudentRejected(CertificateRequest request) {
     String reason = request.getAdminRemark() == null ? "Contact admin" : request.getAdminRemark();
+    String loginLink = frontendUrl + "/login?redirect=/student/certificates";
 
-    String body = "Dear " + request.getStudentName() + ",\n\n"
-        + "Your certificate request was not approved.\n"
-        + "Reason: " + reason + "\n\n"
-        + "Regards,\n"
-        + "Satya Tech Academy";
+    String body = "<div style=\"font-family: sans-serif; color: #333;\">"
+        + "<p>Dear " + request.getStudentName() + ",</p>"
+        + "<p>We are writing to inform you that your certificate request was <strong>not approved</strong>.</p>"
+        + "<h3 style=\"margin-top: 24px;\">Request Details</h3>"
+        + "<ul style=\"list-style: none; padding-left: 0;\">"
+        + "<li style=\"margin-bottom: 8px;\"><strong>Course Name:</strong> " + request.getCourseName() + "</li>"
+        + "<li style=\"margin-bottom: 8px;\"><strong>Reason:</strong> " + reason + "</li>"
+        + "</ul>"
+        + "<p style=\"margin-top: 24px;\">If you believe this is a mistake or need more details, please visit your student dashboard to review your status or contact support.</p>"
+        + "<p style=\"margin: 24px 0;\">"
+        + "  <a href=\"" + loginLink + "\""
+        + "     style=\"display:inline-block; padding:12px 24px; background-color:#2563eb; color:#ffffff; text-decoration:none; border-radius:6px; font-weight:600;\">"
+        + "    View Request"
+        + "  </a>"
+        + "</p>"
+        + "<p>Regards,<br>Satya Tech Academy</p>"
+        + "</div>";
 
     logger.info("Student email sending started for certificate rejection of request ID: {}", request.getId());
-    send(request.getStudentEmail(), "Certificate Request Update", body);
+    send(request.getStudentEmail(), "Certificate Request Update", body, true);
   }
 
   private void send(String to, String subject, String body) {
+    send(to, subject, body, false);
+  }
+
+  private void send(String to, String subject, String body, boolean isHtml) {
     if (mailUsername == null || mailUsername.isBlank()) {
       logger.warn("SMTP Configuration Missing: MAIL_USERNAME is not set. Falling back to MOCK email.");
       logger.info("\n--- EMAIL MOCK ---");
@@ -164,7 +197,7 @@ public class EmailService {
       helper.setFrom(mailFrom);
       helper.setTo(to);
       helper.setSubject(subject);
-      helper.setText(body);
+      helper.setText(body, isHtml);
       
       mailSender.send(message);
       logger.info("Email sent successfully to {} with subject: {}", to, subject);
