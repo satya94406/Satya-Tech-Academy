@@ -191,7 +191,7 @@ export default function StudentDashboard() {
 
       <main className="container-pro py-8">
         <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
-          <aside className="card-pro h-fit p-4 lg:sticky lg:top-24">
+          <aside className="card-pro h-fit p-4 lg:sticky lg:top-24 min-w-0">
             <div className="rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4">
               <p className="text-xs uppercase tracking-[3px] text-gold-400">
                 Student Panel
@@ -219,7 +219,7 @@ export default function StudentDashboard() {
             </nav>
           </aside>
 
-          <section>
+          <section className="min-w-0">
             {activeTab === 'overview' && (
               <Overview
                 user={user}

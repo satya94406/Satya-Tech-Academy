@@ -52,8 +52,14 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="container-pro mt-12 border-t border-white/5 pt-8 text-center text-xs text-slate-500">
-        © 2026 Satya Tech Academy. All Rights Reserved.
+      <div className="container-pro mt-12 border-t border-white/5 pt-8 pb-8 flex flex-col items-center gap-3 text-center text-xs text-slate-500">
+        <div className="flex flex-col items-center gap-1">
+          <p>Registered as a Micro Enterprise under MSME</p>
+          <p>
+            Udyam Registration No.: <span className="select-all font-mono text-slate-400">UDYAM-UP-29-0251909</span>
+          </p>
+        </div>
+        <p>© 2026 Satya Tech Academy. All Rights Reserved.</p>
       </div>
     </footer>
   )

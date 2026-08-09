@@ -40,6 +40,12 @@
       <artifactId>razorpay-java</artifactId>
       <version>1.4.6</version>
     </dependency>
+    <!-- Loads .env file locally, safely ignores it if missing in production (Render) -->
+    <dependency>
+        <groupId>me.paulschwarz</groupId>
+        <artifactId>spring-dotenv</artifactId>
+        <version>4.0.0</version>
+    </dependency>
   </dependencies>
   <build><plugins><plugin><groupId>org.springframework.boot</groupId><artifactId>spring-boot-maven-plugin</artifactId></plugin></plugins></build>
 </project>
