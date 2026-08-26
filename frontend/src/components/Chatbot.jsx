@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef, useEffect } from 'react'
 
 const quickQuestions = [
   'Which course should I start?',
@@ -6,60 +6,61 @@ const quickQuestions = [
   'Do I get a certificate?',
 ]
 
-function getBotReply(message) {
-  const text = message.toLowerCase()
-
-  if (text.includes('start') || text.includes('course')) {
-    return 'If you are beginner, start with JavaScript + React or Java Core + Spring Boot. If your goal is full stack, choose React + Spring Boot + MySQL.'
-  }
-
-  if (text.includes('enroll') || text.includes('join')) {
-    return 'Click Enroll as Student, create your account, then submit the course enrollment form from your student dashboard.'
-  }
-
-  if (text.includes('certificate')) {
-    return 'Yes. After completing the course requirements, eligible students can receive a verified certificate with a unique serial number.'
-  }
-
-  if (text.includes('java') || text.includes('spring')) {
-    return 'Java Spring Boot is best for backend developer jobs. You will learn REST API, JWT, MySQL, JPA, security, and deployment.'
-  }
-
-  if (text.includes('react')) {
-    return 'React is best for frontend development. You will learn components, hooks, routing, forms, API calls, and project UI building.'
-  }
-
-  return 'I can help you choose a course, understand enrollment, and explain what you will learn at Satya Tech Academy.'
-}
-
 export default function Chatbot() {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [conversationId] = useState(() => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(7))
   const [messages, setMessages] = useState([
     {
       from: 'bot',
       text: 'Hi! I am STA assistant. Ask me about courses, enrollment, or certificates.',
     },
   ])
+  const messagesEndRef = useRef(null)
 
   const unread = useMemo(() => messages.filter((message) => message.from === 'bot').length, [messages])
 
-  function sendMessage(text = input) {
-    if (!text.trim()) return
+  async function sendMessage(text = input) {
+    if (!text.trim() || isLoading) return
 
     const userMessage = {
       from: 'user',
       text: text.trim(),
     }
 
-    const botMessage = {
-      from: 'bot',
-      text: getBotReply(text),
-    }
-
-    setMessages((prev) => [...prev, userMessage, botMessage])
+    setMessages((prev) => [...prev, userMessage])
     setInput('')
+    setIsLoading(true)
+
+    try {
+      const res = await fetch('http://localhost:8080/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text.trim(), conversationId }),
+      })
+
+      if (!res.ok) throw new Error('API failed')
+      
+      const data = await res.json()
+      
+      setMessages((prev) => [
+        ...prev,
+        { from: 'bot', text: data.reply },
+      ])
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        { from: 'bot', text: "Sorry, I'm having trouble responding right now. Please try again." },
+      ])
+    } finally {
+      setIsLoading(false)
+    }
   }
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, isLoading])
 
   return (
     <div className="fixed bottom-5 right-5 z-50">
@@ -83,6 +84,12 @@ export default function Chatbot() {
                 {message.text}
               </div>
             ))}
+            {isLoading && (
+              <div className="mr-auto max-w-[85%] rounded-2xl bg-white/10 px-4 py-3 text-sm text-slate-200">
+                <span className="animate-pulse">Typing...</span>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
           </div>
 
           <div className="flex flex-wrap gap-2 border-t border-white/10 p-3">
