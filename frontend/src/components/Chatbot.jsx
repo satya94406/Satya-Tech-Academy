@@ -66,9 +66,18 @@ export default function Chatbot() {
     <div className="fixed bottom-5 right-5 z-50">
       {open && (
         <div className="mb-4 w-[calc(100vw-2.5rem)] max-w-sm overflow-hidden rounded-3xl border border-white/10 bg-academy-900 shadow-2xl">
-          <div className="border-b border-white/10 bg-white/[0.04] px-5 py-4">
-            <p className="font-bold text-white">STA Student Assistant</p>
-            <p className="text-xs text-slate-400">Course and enrollment help</p>
+          <div className="flex items-start justify-between border-b border-white/10 bg-white/[0.04] px-5 py-4">
+            <div>
+              <p className="font-bold text-white">STA Student Assistant</p>
+              <p className="text-xs text-slate-400">Course and enrollment help</p>
+            </div>
+            <button 
+              onClick={() => setOpen(false)}
+              className="text-slate-400 transition-colors hover:text-white"
+              aria-label="Close chatbot"
+            >
+              ✕
+            </button>
           </div>
 
           <div className="max-h-80 space-y-3 overflow-y-auto p-4">
