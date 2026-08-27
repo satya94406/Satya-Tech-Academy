@@ -40,6 +40,11 @@
       <artifactId>razorpay-java</artifactId>
       <version>1.4.6</version>
     </dependency>
+    <dependency>
+        <groupId>com.bucket4j</groupId>
+        <artifactId>bucket4j-core</artifactId>
+        <version>8.10.1</version>
+    </dependency>
     <!-- Loads .env file locally, safely ignores it if missing in production (Render) -->
     <dependency>
         <groupId>me.paulschwarz</groupId>
