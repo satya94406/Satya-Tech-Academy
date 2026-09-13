@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Chatbot from '../components/Chatbot'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import AdBanner from '../components/AdBanner'
 
 const stats = [
   { value: '5000+', label: 'Students', icon: '🎓' },
@@ -291,6 +292,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <AdBanner />
 
       <section className="border-y border-white/10 bg-white/[0.02] py-16">
         <div className="container-pro">
