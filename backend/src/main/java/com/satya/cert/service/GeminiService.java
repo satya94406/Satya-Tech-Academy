@@ -46,15 +46,9 @@ public class GeminiService {
         List<Map<String, Object>> history = conversationMemory.computeIfAbsent(conversationId, k -> new ArrayList<>());
         List<Map<String, Object>> contents = new ArrayList<>(history);
 
-        // If history is empty, inject the system prompt into the first message
-        String finalMessage = message;
-        if (contents.isEmpty()) {
-            finalMessage = getSystemPrompt() + "\n\nUser Question: " + message;
-        }
-
         Map<String, Object> userMessage = new HashMap<>();
         userMessage.put("role", "user");
-        userMessage.put("parts", List.of(Map.of("text", finalMessage)));
+        userMessage.put("parts", List.of(Map.of("text", message)));
         contents.add(userMessage);
 
         HttpHeaders headers = new HttpHeaders();
@@ -62,6 +56,10 @@ public class GeminiService {
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("contents", contents);
+        
+        Map<String, Object> systemInstruction = new HashMap<>();
+        systemInstruction.put("parts", List.of(Map.of("text", getSystemPrompt())));
+        requestBody.put("system_instruction", systemInstruction);
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
 
