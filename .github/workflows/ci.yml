@@ -56,10 +56,20 @@ jobs:
     name: Deploy Frontend
     needs: build-frontend
     runs-on: ubuntu-latest
-    environment: production # This tells GitHub to wait for your manual approval
-    # Only deploy if this push was to the main branch (not a PR)
-    if: github.ref == 'refs/heads/main'
+    environment: production
+    # Only deploy if on main branch AND the secret exists
+    if: github.ref == 'refs/heads/main' && secrets.RENDER_FRONTEND_HOOK_URL != ''
     steps:
       - name: Trigger Render Deploy
-        # This securely calls the Render Deploy Hook without exposing your secret URL
         run: curl -X POST ${{ secrets.RENDER_FRONTEND_HOOK_URL }}
+
+  deploy-backend:
+    name: Deploy Backend
+    needs: build-backend
+    runs-on: ubuntu-latest
+    environment: production
+    # Only deploy if on main branch AND the secret exists
+    if: github.ref == 'refs/heads/main' && secrets.RENDER_BACKEND_HOOK_URL != ''
+    steps:
+      - name: Trigger Render Deploy
+        run: curl -X POST ${{ secrets.RENDER_BACKEND_HOOK_URL }}
