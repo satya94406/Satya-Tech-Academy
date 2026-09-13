@@ -51,3 +51,15 @@ jobs:
 
       - name: Build Frontend
         run: npm run build
+
+  deploy-frontend:
+    name: Deploy Frontend
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    environment: production # This tells GitHub to wait for your manual approval
+    # Only deploy if this push was to the main branch (not a PR)
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Trigger Render Deploy
+        # This securely calls the Render Deploy Hook without exposing your secret URL
+        run: curl -X POST ${{ secrets.RENDER_FRONTEND_HOOK_URL }}

@@ -19,10 +19,10 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#070812]/90 backdrop-blur-md">
       <div className="container-pro flex h-16 items-center justify-between">
         <Link to="/" onClick={closeMobileMenu} className="flex items-center gap-3 transition hover:opacity-90">
-          <img 
-            src="/logo.png" 
-            alt="Satya Tech Academy Logo" 
-            className="h-11 w-11 rounded-full object-cover shadow-[0_0_15px_rgba(245,158,11,0.3)] md:h-12 md:w-12" 
+          <img
+            src="/logo.png"
+            alt="Satya Tech Academy Logo"
+            className="h-11 w-11 rounded-full object-cover shadow-[0_0_15px_rgba(245,158,11,0.3)] md:h-12 md:w-12"
           />
         </Link>
 
@@ -113,7 +113,7 @@ export default function Navbar() {
               About
             </NavLink>
             <NavLink to="/contact" onClick={closeMobileMenu} className={navLinkClass}>
-              Contact
+              Contact Us
             </NavLink>
             <NavLink to="/verify" onClick={closeMobileMenu} className={navLinkClass}>
               Verify
