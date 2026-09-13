@@ -45,28 +45,41 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         String apiType = determineApiType(uri);
         String identifier = determineIdentifier(request);
 
-        Bucket bucket = rateLimitingService.resolveBucket(identifier, apiType);
-        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+        try {
+            Bucket bucket = rateLimitingService.resolveBucket(identifier, apiType);
+            ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
 
-        if (probe.isConsumed()) {
-            // Set X-Rate-Limit-Remaining header
-            response.setHeader("X-Rate-Limit-Remaining", String.valueOf(probe.getRemainingTokens()));
-            filterChain.doFilter(request, response);
-        } else {
-            // Rate limit exceeded
-            long waitForRefill = probe.getNanosToWaitForRefill();
-            long retryAfterSeconds = TimeUnit.NANOSECONDS.toSeconds(waitForRefill) + 1; // Round up
+            if (probe.isConsumed()) {
+                // Set X-Rate-Limit-Remaining header
+                response.setHeader("X-Rate-Limit-Remaining", String.valueOf(probe.getRemainingTokens()));
+                filterChain.doFilter(request, response);
+            } else {
+                // Rate limit exceeded
+                long waitForRefill = probe.getNanosToWaitForRefill();
+                long retryAfterSeconds = TimeUnit.NANOSECONDS.toSeconds(waitForRefill) + 1; // Round up
 
-            response.setHeader("X-Rate-Limit-Retry-After-Seconds", String.valueOf(retryAfterSeconds));
-            response.setHeader("Retry-After", String.valueOf(retryAfterSeconds));
-            response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+                response.setHeader("X-Rate-Limit-Retry-After-Seconds", String.valueOf(retryAfterSeconds));
+                response.setHeader("Retry-After", String.valueOf(retryAfterSeconds));
+                response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+                response.setContentType("application/json");
+
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("status", 429);
+                errorResponse.put("message", "Too many requests. Please try again later.");
+                
+                objectMapper.writeValue(response.getWriter(), errorResponse);
+            }
+        } catch (Exception e) {
+            // Handle Redis connection failures or Bucket4j errors
+            response.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
             response.setContentType("application/json");
 
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", 429);
-            errorResponse.put("message", "Too many requests. Please try again later.");
+            errorResponse.put("status", 503);
+            errorResponse.put("message", "Rate limiting service is temporarily unavailable due to a connection error.");
             
-            // System.out.println("Rate limit exceeded for identifier: " + identifier + " on API: " + apiType);
+            // Log the error securely in real app, but don't expose stack traces
+            System.err.println("RateLimitingFilter error: " + e.getMessage());
 
             objectMapper.writeValue(response.getWriter(), errorResponse);
         }

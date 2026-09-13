@@ -14,6 +14,8 @@ public class Course {
     private String name;
     private Double price;
     private String duration;
+    
+    private Boolean published = false;
 
     public Course() {}
 
@@ -34,4 +36,7 @@ public class Course {
 
     public String getDuration() { return duration; }
     public void setDuration(String duration) { this.duration = duration; }
+
+    public Boolean getPublished() { return published; }
+    public void setPublished(Boolean published) { this.published = published; }
 }

@@ -2,16 +2,21 @@ package com.satya.cert.ratelimit;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
+import io.github.bucket4j.BucketConfiguration;
+import io.github.bucket4j.distributed.ExpirationAfterWriteStrategy;
+import io.github.bucket4j.distributed.proxy.ProxyManager;
+import io.github.bucket4j.redis.lettuce.cas.LettuceBasedProxyManager;
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisURI;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class RateLimitingService {
+public class RateLimitingService { 
 
     @Value("${app.ratelimit.login:5}")
     private int loginLimit;
@@ -36,16 +41,42 @@ public class RateLimitingService {
 
     @Value("${app.ratelimit.general:100}")
     private int generalLimit;
+    
+    @Value("${spring.data.redis.host:localhost}")
+    private String redisHost;
 
-    // Cache of buckets: Cache key is "identifier:apiType" (e.g., "192.168.1.1:LOGIN" or "user@gmail.com:CHAT")
-    private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
+    @Value("${spring.data.redis.port:6379}")
+    private int redisPort;
+
+    @Value("${spring.data.redis.password:}")
+    private String redisPassword;
+
+    private ProxyManager<byte[]> proxyManager;
+
+    @PostConstruct
+    public void init() {
+        RedisURI.Builder uriBuilder = RedisURI.builder()
+                .withHost(redisHost)
+                .withPort(redisPort);
+        
+        if (redisPassword != null && !redisPassword.isEmpty()) {
+            uriBuilder.withPassword(redisPassword.toCharArray());
+        }
+        
+        RedisClient redisClient = RedisClient.create(uriBuilder.build());
+        
+        this.proxyManager = LettuceBasedProxyManager.builderFor(redisClient)
+                .withExpirationStrategy(ExpirationAfterWriteStrategy.basedOnTimeForRefillingBucketUpToMax(Duration.ofSeconds(10)))
+                .build();
+    }
 
     public Bucket resolveBucket(String identifier, String apiType) {
         String cacheKey = identifier + ":" + apiType;
-        return cache.computeIfAbsent(cacheKey, k -> createNewBucket(apiType));
+        BucketConfiguration configuration = createBucketConfiguration(apiType);
+        return proxyManager.builder().build(cacheKey.getBytes(StandardCharsets.UTF_8), configuration);
     }
 
-    private Bucket createNewBucket(String apiType) {
+    private BucketConfiguration createBucketConfiguration(String apiType) {
         int limit = switch (apiType) {
             case "LOGIN" -> loginLimit;
             case "SIGNUP" -> signupLimit;
@@ -63,8 +94,9 @@ public class RateLimitingService {
                 .refillGreedy(limit, Duration.ofSeconds(10))
                 .build();
 
-        return Bucket.builder()
+        return BucketConfiguration.builder()
                 .addLimit(limitRule)
                 .build();
     }
 }
+
