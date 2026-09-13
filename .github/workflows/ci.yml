@@ -57,19 +57,31 @@ jobs:
     needs: build-frontend
     runs-on: ubuntu-latest
     environment: production
-    # Only deploy if on main branch AND the secret exists
-    if: github.ref == 'refs/heads/main' && secrets.RENDER_FRONTEND_HOOK_URL != ''
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Trigger Render Deploy
-        run: curl -X POST ${{ secrets.RENDER_FRONTEND_HOOK_URL }}
+        env:
+          HOOK_URL: ${{ secrets.RENDER_FRONTEND_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK_URL" ]; then
+            echo "No frontend hook URL provided. Skipping deployment."
+          else
+            curl -X POST "$HOOK_URL"
+          fi
 
   deploy-backend:
     name: Deploy Backend
     needs: build-backend
     runs-on: ubuntu-latest
     environment: production
-    # Only deploy if on main branch AND the secret exists
-    if: github.ref == 'refs/heads/main' && secrets.RENDER_BACKEND_HOOK_URL != ''
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Trigger Render Deploy
-        run: curl -X POST ${{ secrets.RENDER_BACKEND_HOOK_URL }}
+        env:
+          HOOK_URL: ${{ secrets.RENDER_BACKEND_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK_URL" ]; then
+            echo "No backend hook URL provided. Skipping deployment."
+          else
+            curl -X POST "$HOOK_URL"
+          fi
