@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/chat")
-@CrossOrigin(origins = {"http://localhost:5173", "https://satyaacademy.tech", "https://www.satyaacademy.tech", "https://satya-tech-academy.vercel.app"}) // Allow frontend domains
+@CrossOrigin(origins = {"http://localhost:5173", "https://satyaacademy.tech", "https://www.satyaacademy.tech", "https://satya-tech-academy.vercel.app", "https://satya-academy-frontend.onrender.com"}) // Allow frontend domains
 public class ChatController {
 
     private final GeminiService geminiService;

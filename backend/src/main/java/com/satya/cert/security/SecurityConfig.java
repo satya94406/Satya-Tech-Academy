@@ -48,7 +48,8 @@ public class SecurityConfig {
         "https://satya-tech-academy.vercel.app",
         "http://16.170.164.119",
         "https://satyaacademy.tech",
-        "https://www.satyaacademy.tech"
+        "https://www.satyaacademy.tech",
+        "https://satya-academy-frontend.onrender.com"
     ));
     
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
