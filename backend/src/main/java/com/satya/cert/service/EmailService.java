@@ -175,6 +175,25 @@ public class EmailService {
     send(request.getStudentEmail(), "Certificate Request Update", body, true);
   }
 
+  public void sendPasswordResetEmail(String to, String resetLink) {
+    String body = "<div style=\"font-family: sans-serif; color: #333;\">"
+        + "<p>Hello,</p>"
+        + "<p>You have requested to reset your password for Satya Tech Academy.</p>"
+        + "<p>Click the button below to set a new password. This link is valid for 1 hour.</p>"
+        + "<p style=\"margin: 24px 0;\">"
+        + "  <a href=\"" + resetLink + "\""
+        + "     style=\"display:inline-block; padding:12px 24px; background-color:#2563eb; color:#ffffff; text-decoration:none; border-radius:6px; font-weight:600;\">"
+        + "    Reset Password"
+        + "  </a>"
+        + "</p>"
+        + "<p>If you did not request this, you can safely ignore this email.</p>"
+        + "<p>Regards,<br>Satya Tech Academy</p>"
+        + "</div>";
+
+    logger.info("Sending password reset email to: {}", to);
+    send(to, "Password Reset - Satya Tech Academy", body, true);
+  }
+
   private void send(String to, String subject, String body) {
     send(to, subject, body, false);
   }

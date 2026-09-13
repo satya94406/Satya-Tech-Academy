@@ -103,6 +103,18 @@ export const authApi = {
     body: data,
     auth: false,
   }),
+
+  forgotPassword: (data) => request('/auth/forgot-password', {
+    method: 'POST',
+    body: data,
+    auth: false,
+  }),
+
+  resetPassword: (data) => request('/auth/reset-password', {
+    method: 'POST',
+    body: data,
+    auth: false,
+  }),
 }
 
 export const studentApi = {
