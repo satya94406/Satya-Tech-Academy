@@ -34,7 +34,8 @@ export default function Chatbot() {
     setIsLoading(true)
 
     try {
-      const res = await fetch('http://localhost:8080/api/chat', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
+      const res = await fetch(`${apiUrl}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text.trim(), conversationId }),
