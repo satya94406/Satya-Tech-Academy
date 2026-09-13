@@ -46,7 +46,9 @@ public class SecurityConfig {
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "https://satya-tech-academy.vercel.app",
-        "http://16.170.164.119"
+        "http://16.170.164.119",
+        "https://satyaacademy.tech",
+        "https://www.satyaacademy.tech"
     ));
     
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
