@@ -52,5 +52,4 @@ npm run dev
 Frontend runs on:
 
 ```text
-http://localhost:5173
 ```
